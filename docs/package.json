@@ -1,7 +1,7 @@
 {
   "name": "genkit-plugins-docs",
   "description": "Documentation site for genkit-plugins",
-  "version": "0.23.0",
+  "version": "0.23.2",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
