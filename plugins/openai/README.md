@@ -25,6 +25,12 @@
 **`genkitx-openai`** is a community plugin for using OpenAI APIs with
 [Firebase Genkit](https://github.com/firebase/genkit). Built by [**The Fire Company**](https://github.com/TheFireCo). 🔥
 
+> [!WARNING]  
+> **This plugin has been merged into the core Genkit distribution.** Please use the official OpenAI plugins instead:
+>
+> - **OpenAI Plugin**: `@genkit-ai/compat-oai/openai`
+> - **Compatible OpenAI API Plugin**: `@genkit-ai/compat-oai`
+
 This Genkit plugin allows to use OpenAI models through their official APIs.
 
 ## Supported models
