@@ -69,6 +69,10 @@ const MODELS_SUPPORTING_OPENAI_RESPONSE_FORMAT = [
   'gpt-4.1',
   'gpt-4.1-mini',
   'gpt-4.1-nano',
+  'gpt-5',
+  'gpt-5-mini',
+  'gpt-5-nano',
+  'gpt-5-chat-latest',
 ];
 
 export const OpenAiConfigSchema = GenerationCommonConfigSchema.extend({
@@ -348,6 +352,70 @@ export const gpt35Turbo = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
+export const gpt5 = modelRef({
+  name: 'openai/gpt-5',
+  info: {
+    versions: ['gpt-5'],
+    label: 'OpenAI - GPT-5',
+    supports: {
+      multiturn: true,
+      tools: true,
+      media: true,
+      systemRole: true,
+      output: ['text', 'json'],
+    },
+  },
+  configSchema: OpenAiConfigSchema,
+});
+
+export const gpt5Mini = modelRef({
+  name: 'openai/gpt-5-mini',
+  info: {
+    versions: ['gpt-5-mini'],
+    label: 'OpenAI - GPT-5 Mini',
+    supports: {
+      multiturn: true,
+      tools: true,
+      media: true,
+      systemRole: true,
+      output: ['text', 'json'],
+    },
+  },
+  configSchema: OpenAiConfigSchema,
+});
+
+export const gpt5Nano = modelRef({
+  name: 'openai/gpt-5-nano',
+  info: {
+    versions: ['gpt-5-nano'],
+    label: 'OpenAI - GPT-5 Nano',
+    supports: {
+      multiturn: true,
+      tools: true,
+      media: true,
+      systemRole: true,
+      output: ['text', 'json'],
+    },
+  },
+  configSchema: OpenAiConfigSchema,
+});
+
+export const gpt5ChatLatest = modelRef({
+  name: 'openai/gpt-5-chat-latest',
+  info: {
+    versions: ['gpt-5-chat-latest'],
+    label: 'OpenAI - GPT-5 Chat Latest',
+    supports: {
+      multiturn: true,
+      tools: false,
+      media: true,
+      systemRole: true,
+      output: ['text'],
+    },
+  },
+  configSchema: OpenAiConfigSchema,
+});
+
 export const SUPPORTED_GPT_MODELS: Record<
   string,
   ModelReference<typeof OpenAiConfigSchema>
@@ -362,6 +430,10 @@ export const SUPPORTED_GPT_MODELS: Record<
   'gpt-4.1-mini': gpt41Mini,
   'gpt-4.1-nano': gpt41Nano,
   'gpt-3.5-turbo': gpt35Turbo,
+  'gpt-5': gpt5,
+  'gpt-5-mini': gpt5Mini,
+  'gpt-5-nano': gpt5Nano,
+  'gpt-5-chat-latest': gpt5ChatLatest,
   'o1-preview': o1Preview,
   o1: o1,
   'o1-mini': o1Mini,
