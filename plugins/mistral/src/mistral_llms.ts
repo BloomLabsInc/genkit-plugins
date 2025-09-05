@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { Message, Part } from 'genkit';
+import { Message, Part, StreamingCallback } from 'genkit';
 import {
   CandidateData,
   GenerateRequest,
+  GenerateResponseChunkData,
   MessageData,
   ModelAction,
   Role,
@@ -499,7 +500,10 @@ export function mistralModel(
       ...model.info,
       configSchema: SUPPORTED_MISTRAL_MODELS[name].configSchema,
     },
-    async (request, streamingCallback) => {
+    async (
+      request,
+      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
+    ) => {
       let response: ChatCompletionResponse | CompletionChunk;
       const body = toMistralRequestBody(name, request);
       if (streamingCallback) {

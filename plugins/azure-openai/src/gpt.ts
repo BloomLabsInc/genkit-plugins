@@ -21,9 +21,15 @@ import type {
   MessageData,
   Part,
   Role,
+  StreamingCallback,
   ToolRequestPart,
 } from 'genkit';
-import { CandidateData, modelRef, ToolDefinition } from 'genkit/model';
+import {
+  CandidateData,
+  GenerateResponseChunkData,
+  modelRef,
+  ToolDefinition,
+} from 'genkit/model';
 import { AzureOpenAI } from 'openai';
 import {
   type ChatCompletion,
@@ -633,7 +639,10 @@ export function gptModel(ai: Genkit, name: string, client: AzureOpenAI) {
       ...model.info,
       configSchema: SUPPORTED_GPT_MODELS[name].configSchema,
     },
-    async (request, streamingCallback) => {
+    async (
+      request,
+      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
+    ) => {
       let response: ChatCompletion;
       const body = toOpenAiRequestBody(name, request);
       if (streamingCallback) {

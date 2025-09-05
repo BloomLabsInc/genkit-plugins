@@ -915,11 +915,20 @@ describe('claudeRunner', () => {
       'claude-3-5-haiku',
       anthropicClient as unknown as Anthropic
     );
-    await runner({ messages: [] });
-    expect(anthropicClient.messages.create).toHaveBeenCalledWith({
-      model: 'claude-3-5-haiku-latest',
-      max_tokens: 4096,
-    });
+    const abortSignal = new AbortController().signal;
+    await runner(
+      { messages: [] },
+      { streamingRequested: false, sendChunk: () => {}, abortSignal }
+    );
+    expect(anthropicClient.messages.create).toHaveBeenCalledWith(
+      {
+        model: 'claude-3-5-haiku-latest',
+        max_tokens: 4096,
+      },
+      {
+        signal: abortSignal,
+      }
+    );
   });
 
   it('should correctly run streaming requests', async () => {
@@ -968,12 +977,21 @@ describe('claudeRunner', () => {
       'claude-3-5-haiku',
       anthropicClient as unknown as Anthropic
     );
-    await runner({ messages: [] }, streamingCallback);
-    expect(anthropicClient.messages.stream).toHaveBeenCalledWith({
-      model: 'claude-3-5-haiku-latest',
-      max_tokens: 4096,
-      stream: true,
-    });
+    const abortSignal = new AbortController().signal;
+    await runner(
+      { messages: [] },
+      { streamingRequested: true, sendChunk: streamingCallback, abortSignal }
+    );
+    expect(anthropicClient.messages.stream).toHaveBeenCalledWith(
+      {
+        model: 'claude-3-5-haiku-latest',
+        max_tokens: 4096,
+        stream: true,
+      },
+      {
+        signal: abortSignal,
+      }
+    );
   });
 });
 
@@ -995,6 +1013,7 @@ describe('claudeModel', () => {
     claudeModel(ai, 'claude-3-5-haiku', {} as Anthropic);
     expect(ai.defineModel).toHaveBeenCalledWith(
       {
+        apiVersion: 'v2',
         name: claude35Haiku.name,
         ...claude35Haiku.info,
         configSchema: claude35Haiku.configSchema,

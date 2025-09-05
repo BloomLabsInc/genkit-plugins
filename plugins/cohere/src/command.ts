@@ -20,9 +20,15 @@ import type {
   GenerateRequest,
   MessageData,
   Role,
+  StreamingCallback,
   ToolRequestPart,
 } from 'genkit';
-import type { ModelAction, ToolDefinition, CandidateData } from 'genkit/model';
+import type {
+  ModelAction,
+  ToolDefinition,
+  CandidateData,
+  GenerateResponseChunkData,
+} from 'genkit/model';
 import { modelRef } from 'genkit/model';
 import type { CohereClient } from 'cohere-ai';
 import { Cohere } from 'cohere-ai';
@@ -466,7 +472,7 @@ export function commandModel(
     },
     async (
       request,
-      streamingCallback
+      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
     ): Promise<{
       candidates: CandidateData[];
       usage: {

@@ -569,21 +569,30 @@ export function claudeRunner(
 ) {
   return async (
     request: GenerateRequest<typeof AnthropicConfigSchema>,
-    streamingCallback?: StreamingCallback<GenerateResponseChunkData>
+    {
+      streamingRequested,
+      sendChunk,
+      abortSignal,
+    }: {
+      streamingRequested: boolean;
+      sendChunk: StreamingCallback<GenerateResponseChunkData>;
+      abortSignal: AbortSignal;
+    }
   ): Promise<GenerateResponseData> => {
     let response: Message;
     const body = toAnthropicRequestBody(
       name,
       request,
-      !!streamingCallback,
+      streamingRequested,
       cacheSystemPrompt
     );
-    if (streamingCallback) {
-      const stream = client.messages.stream(body);
+
+    if (streamingRequested) {
+      const stream = client.messages.stream(body, { signal: abortSignal });
       for await (const chunk of stream) {
         const c = fromAnthropicContentBlockChunk(chunk);
         if (c) {
-          streamingCallback({
+          sendChunk({
             index: 0,
             content: [c],
           });
@@ -591,7 +600,9 @@ export function claudeRunner(
       }
       response = await stream.finalMessage();
     } else {
-      response = (await client.messages.create(body)) as Message;
+      response = (await client.messages.create(body, {
+        signal: abortSignal,
+      })) as Message;
     }
     return fromAnthropicResponse(response);
   };
@@ -612,6 +623,7 @@ export function claudeModel(
 
   return ai.defineModel(
     {
+      apiVersion: 'v2',
       name: modelId,
       ...model.info,
       configSchema: model.configSchema,

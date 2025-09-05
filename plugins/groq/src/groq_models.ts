@@ -30,10 +30,16 @@ import {
   MessageData,
   Part,
   Role,
+  StreamingCallback,
   ToolRequestPart,
   z,
 } from 'genkit';
-import { CandidateData, modelRef, ToolDefinition } from 'genkit/model';
+import {
+  CandidateData,
+  GenerateResponseChunkData,
+  modelRef,
+  ToolDefinition,
+} from 'genkit/model';
 
 export const GroqConfigSchema = GenerationCommonConfigSchema.extend({
   stream: z.boolean().optional(),
@@ -583,7 +589,10 @@ export function groqModel(ai: Genkit, name: string, client: Groq) {
       ...model.info,
       configSchema: model.configSchema,
     },
-    async (request, streamingCallback) => {
+    async (
+      request,
+      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
+    ) => {
       let response: ChatCompletion;
       const body = toGroqRequestBody(name, request);
       if (streamingCallback) {
