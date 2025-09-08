@@ -19,7 +19,7 @@
 </br>
 
 This repository contains community plugins for
-[Firebase Genkit](https://github.com/firebase/genkit). Built by [**The Fire Company**](https://github.com/TheFireCo) and the community. 🔥
+[Firebase Genkit](https://github.com/firebase/genkit). Built by the community. 🔥
 
 ## Available plugins
 
