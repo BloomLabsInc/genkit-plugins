@@ -1,25 +1,25 @@
-![Firebase Genkit + Convex](https://github.com/TheFireCo/genkit-plugins/blob/main/assets/genkit-hnsw.png?raw=true)
+![Firebase Genkit + Convex](https://github.com/BloomLabsInc/genkit-plugins/blob/main/assets/genkit-hnsw.png?raw=true)
 
 <h1 align="center"> Firebase Genkit <> HNSW Vector Plugin</h1>
 
 <h4 align="center">HNSW Community Plugin for Google Firebase Genkit </h4>
 
 <div align="center">
-   <img alt="Github lerna version" src="https://img.shields.io/github/lerna-json/v/TheFireCo/genkit-plugins?label=version">
+   <img alt="Github lerna version" src="https://img.shields.io/github/lerna-json/v/BloomLabsInc/genkit-plugins?label=version">
    <img alt="NPM Downloads" src="https://img.shields.io/npm/dw/genkitx-hnsw">
-   <img alt="GitHub Org's stars" src="https://img.shields.io/github/stars/TheFireCo?style=social">
-   <img alt="GitHub License" src="https://img.shields.io/github/license/TheFireCo/genkit-plugins">
+   <img alt="GitHub Org's stars" src="https://img.shields.io/github/stars/BloomLabsInc?style=social">
+   <img alt="GitHub License" src="https://img.shields.io/github/license/BloomLabsInc/genkit-plugins">
    <img alt="Static Badge" src="https://img.shields.io/badge/yes-a?label=maintained">
 </div>
 
 <div align="center">
-   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/TheFireCo/genkit-plugins?color=blue">
-   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues-pr/TheFireCo/genkit-plugins?color=blue">
-   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/TheFireCo/genkit-plugins">
+   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/BloomLabsInc/genkit-plugins?color=blue">
+   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues-pr/BloomLabsInc/genkit-plugins?color=blue">
+   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/BloomLabsInc/genkit-plugins">
 </div>
 
 **`genkitx-hnsw`** is a community plugin for using HNSW Vector Store with
-[Firebase Genkit](https://github.com/firebase/genkit). Built by [**The Fire Company**](https://github.com/TheFireCo). 🔥
+[Firebase Genkit](https://github.com/firebase/genkit). Built by [**Bloom Labs Inc**](https://github.com/BloomLabsInc). 🔥
 
 ## Installation
 
@@ -38,7 +38,7 @@ This is a usage of Genkit plugin flow to save data into vector store with HNSW V
 #### Data preparations
 
 Prepare your data or documents in a Folder
-![Restaurants data](https://github.com/TheFireCo/genkit-plugins/blob/main/plugins/hnsw/assets/restaurants-data.png?raw=true)
+![Restaurants data](https://github.com/BloomLabsInc/genkit-plugins/blob/main/plugins/hnsw/assets/restaurants-data.png?raw=true)
 
 #### Register HNSW Indexer Plugin
 
@@ -63,11 +63,11 @@ Execute the flow with Input and Output required parameter
 - `dataPath` : Your data and other documents path to be learned by the AI
 - `indexOutputPath` : Your expected output path for your Vector Store Index that is processed based on the data and documents you provided
 
-![Genkit UI HNSW Indexer Flow](https://github.com/TheFireCo/genkit-plugins/blob/main/plugins/hnsw/assets/hnsw-indexer-flow.png?raw=true)
+![Genkit UI HNSW Indexer Flow](https://github.com/BloomLabsInc/genkit-plugins/blob/main/plugins/hnsw/assets/hnsw-indexer-flow.png?raw=true)
 
 #### Vector Store Index Result
 
-![HNSW Vector](https://github.com/retzd-tech/TheFireCo/genkit-plugins/blob/main/plugins/hnsw/assets/hnsw-indexer-result.png?raw=true)
+![HNSW Vector](https://github.com/retzd-tech/BloomLabsInc/genkit-plugins/blob/main/plugins/hnsw/assets/hnsw-indexer-result.png?raw=true)
 Vector store will be saved in the defined output path. this index will be used for the prompt generation process with the HNSW Retriever plugin. you can continue the implementation by using the HNSW Retriever plugin
 
 ### Optional Parameter
@@ -116,7 +116,7 @@ In this example, Let's try to ask about the price list information of a restaura
 
 We can type the prompt and run it, after the flow finished, you will get response enriched with specific knowledge based on your Vector Index.
 
-![Genkit UI Prompt Result](https://github.com/TheFireCo/genkit-plugins/blob/main/plugins/hnsw/assets/hnsw-retriever-flow.png?raw=true)
+![Genkit UI Prompt Result](https://github.com/BloomLabsInc/genkit-plugins/blob/main/plugins/hnsw/assets/hnsw-retriever-flow.png?raw=true)
 
 ### Optional Parameter
 
@@ -147,19 +147,19 @@ We can type the prompt and run it, after the flow finished, you will get respons
 
 ## Contributing
 
-Want to contribute to the project? That's awesome! Head over to our [Contribution Guidelines](https://github.com/TheFireCo/genkit-plugins/blob/main/CONTRIBUTING.md).
+Want to contribute to the project? That's awesome! Head over to our [Contribution Guidelines](https://github.com/BloomLabsInc/genkit-plugins/blob/main/CONTRIBUTING.md).
 
 ## Need support?
 
 > \[!NOTE\]\
 > This repository depends on Google's Firebase Genkit. For issues and questions related to Genkit, please refer to instructions available in [Genkit's repository](https://github.com/firebase/genkit).
 
-Reach out by opening a discussion on [Github Discussions](https://github.com/TheFireCo/genkit-plugins/discussions).
+Reach out by opening a discussion on [Github Discussions](https://github.com/BloomLabsInc/genkit-plugins/discussions).
 
 ## Credits
 
-This plugin is proudly maintained by the team at [**The Fire Company**](https://github.com/TheFireCo). 🔥
+This plugin is proudly maintained by the team at [**Bloom Labs Inc**](https://github.com/BloomLabsInc). 🔥
 
 ## License
 
-This project is licensed under the [Apache 2.0 License](https://github.com/TheFireCo/genkit-plugins/blob/main/LICENSE).
+This project is licensed under the [Apache 2.0 License](https://github.com/BloomLabsInc/genkit-plugins/blob/main/LICENSE).

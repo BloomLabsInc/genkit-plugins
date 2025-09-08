@@ -1,19 +1,19 @@
-![Firebase Genkit Community Plugins](https://github.com/TheFireCo/genkit-plugins/blob/main/assets/genkit-plugins.png?raw=true)
+![Firebase Genkit Community Plugins](https://github.com/BloomLabsInc/genkit-plugins/blob/main/assets/genkit-plugins.png?raw=true)
 
 <h4 align="center">Community Plugins for Google Firebase Genkit</h4>
 
 <div align="center">
-   <img alt="Github lerna version" src="https://img.shields.io/github/lerna-json/v/TheFireCo/genkit-plugins?label=version">
-   <img alt="GitHub Org's stars" src="https://img.shields.io/github/stars/TheFireCo?style=social">
-   <img alt="GitHub License" src="https://img.shields.io/github/license/TheFireCo/genkit-plugins">
+   <img alt="Github lerna version" src="https://img.shields.io/github/lerna-json/v/BloomLabsInc/genkit-plugins?label=version">
+   <img alt="GitHub Org's stars" src="https://img.shields.io/github/stars/BloomLabsInc?style=social">
+   <img alt="GitHub License" src="https://img.shields.io/github/license/BloomLabsInc/genkit-plugins">
    <img alt="Static Badge" src="https://img.shields.io/badge/yes-a?label=maintained">
 </div>
 
 <div align="center">
-   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/TheFireCo/genkit-plugins?color=blue">
-   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues-pr/TheFireCo/genkit-plugins?color=blue">
-   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/TheFireCo/genkit-plugins">
-   <img alt="GitHub contributors from allcontributors.org (with branch)" src="https://img.shields.io/github/all-contributors/TheFireCo/genkit-plugins/main"/>
+   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/BloomLabsInc/genkit-plugins?color=blue">
+   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues-pr/BloomLabsInc/genkit-plugins?color=blue">
+   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/BloomLabsInc/genkit-plugins">
+   <img alt="GitHub contributors from allcontributors.org (with branch)" src="https://img.shields.io/github/all-contributors/BloomLabsInc/genkit-plugins/main"/>
 </div>
 
 </br>
@@ -52,7 +52,7 @@ Install the plugin in your project with your favorite package manager. For examp
 
 ## Usage
 
-Usage examples of the plugins are available [here](https://github.com/TheFireCo/genkit-plugins/blob/main/examples/README.md).
+Usage examples of the plugins are available [here](https://github.com/BloomLabsInc/genkit-plugins/blob/main/examples/README.md).
 
 For more detailed information on how to use Genkit plugins, please refer to the [official Genkit documentation](https://firebase.google.com/docs/genkit/get-started).
 
@@ -65,18 +65,18 @@ Products built with `genkit-plugins`:
 
 ## Contributing
 
-Want to contribute to the project? That's awesome! Head over to our [Contribution Guidelines](https://github.com/TheFireCo/genkit-plugins/blob/main/CONTRIBUTING.md).
+Want to contribute to the project? That's awesome! Head over to our [Contribution Guidelines](https://github.com/BloomLabsInc/genkit-plugins/blob/main/CONTRIBUTING.md).
 
 ## Need support?
 
 > [!NOTE]
 > This repository depends on Google's Firebase Genkit. For issues and questions related to Genkit, please refer to instructions available in [Genkit's repository](https://github.com/firebase/genkit).
 
-Reach out by opening a discussion on [Github Discussions](https://github.com/TheFireCo/genkit-plugins/discussions).
+Reach out by opening a discussion on [Github Discussions](https://github.com/BloomLabsInc/genkit-plugins/discussions).
 
 ## Credits
 
-This repository is proudly maintained by the team at [**The Fire Company**](https://github.com/TheFireCo). 🔥
+This repository is proudly maintained by the team at [**Bloom Labs**](https://github.com/BloomLabsInc). 🔥
 
 ## Contributors
 
@@ -113,6 +113,6 @@ This repository is proudly maintained by the team at [**The Fire Company**](http
 
 ## License
 
-This project is licensed under the [Apache 2.0 License](https://github.com/TheFireCo/genkit-plugins/blob/main/LICENSE).
+This project is licensed under the [Apache 2.0 License](https://github.com/BloomLabsInc/genkit-plugins/blob/main/LICENSE).
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202%2E0-lightgrey.svg)](https://github.com/TheFireCo/genkit-plugins/blob/main/LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202%2E0-lightgrey.svg)](https://github.com/BloomLabsInc/genkit-plugins/blob/main/LICENSE)

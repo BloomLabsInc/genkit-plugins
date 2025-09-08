@@ -11,4 +11,4 @@
 
 # How to contribute
 
-Learn more how to contribute [here](https://github.com/TheFireCo/genkit-plugins/blob/main/CONTRIBUTING.md)
+Learn more how to contribute [here](https://github.com/BloomLabsInc/genkit-plugins/blob/main/CONTRIBUTING.md)

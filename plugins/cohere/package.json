@@ -14,10 +14,10 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheFireCo/genkit-plugins.git",
+    "url": "git+https://github.com/BloomLabsInc/genkit-plugins.git",
     "directory": "plugins/cohere"
   },
-  "author": "TheFireCo",
+  "author": "BloomLabsInc",
   "license": "Apache-2.0",
   "dependencies": {
     "cohere-ai": "^7.17.1"

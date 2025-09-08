@@ -20,10 +20,10 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheFireCo/genkit-plugins.git",
+    "url": "git+https://github.com/BloomLabsInc/genkit-plugins.git",
     "directory": "plugins/anthropic"
   },
-  "author": "TheFireCo",
+  "author": "BloomLabsInc",
   "license": "Apache-2.0",
   "peerDependencies": {
     "genkit": "^1.15.0"

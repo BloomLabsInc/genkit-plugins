@@ -16,7 +16,7 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'TheFireCo', // Usually your GitHub org/user name.
+  organizationName: 'BloomLabsInc', // Usually your GitHub org/user name.
   projectName: 'genkit-plugins', // Usually your repo name.
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
@@ -41,7 +41,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/TheFireCo/genkit-plugins/tree/main/docs/',
+            'https://github.com/BloomLabsInc/genkit-plugins/tree/main/docs/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -67,7 +67,7 @@ const config: Config = {
           label: 'Plugins',
         },
         {
-          href: 'https://github.com/TheFireCo/genkit-plugins',
+          href: 'https://github.com/BloomLabsInc/genkit-plugins',
           label: 'GitHub',
           position: 'right',
         },
@@ -90,7 +90,7 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/TheFireCo/genkit-plugins',
+              href: 'https://github.com/BloomLabsInc/genkit-plugins',
             },
           ],
         },
@@ -108,7 +108,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} The Fire Company`,
+      copyright: `Copyright © ${new Date().getFullYear()} Bloom Labs Inc`,
     },
     prism: {
       theme: prismThemes.github,

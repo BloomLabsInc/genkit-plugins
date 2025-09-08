@@ -14,10 +14,10 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheFireCo/genkit-plugins.git",
+    "url": "git+https://github.com/BloomLabsInc/genkit-plugins.git",
     "directory": "plugins/mistralai"
   },
-  "author": "TheFireCo",
+  "author": "BloomLabsInc",
   "license": "Apache-2.0",
   "dependencies": {
     "@mistralai/mistralai": "^1.6.0"

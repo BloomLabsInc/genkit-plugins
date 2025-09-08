@@ -17,7 +17,7 @@
   },
   "link.item.label.GitHub": {
     "message": "GitHub",
-    "description": "The label of footer link with label=GitHub linking to https://github.com/TheFireCo/genkit-plugins"
+    "description": "The label of footer link with label=GitHub linking to https://github.com/BloomLabsInc/genkit-plugins"
   },
   "link.item.label.Fireview": {
     "message": "Fireview",
@@ -28,7 +28,7 @@
     "description": "The label of footer link with label=Giftit linking to https://giftit.social"
   },
   "copyright": {
-    "message": "Copyright © 2025 The Fire Company",
+    "message": "Copyright © 2025 Bloom Labs Inc",
     "description": "The footer copyright"
   }
 }

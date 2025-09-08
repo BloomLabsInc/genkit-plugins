@@ -20,10 +20,10 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheFireCo/genkit-plugins.git",
+    "url": "git+https://github.com/BloomLabsInc/genkit-plugins.git",
     "directory": "plugins/azure-openai"
   },
-  "author": "TheFireCo",
+  "author": "BloomLabsInc",
   "license": "Apache-2.0",
   "dependencies": {
     "@azure/openai": "^2.0.0",

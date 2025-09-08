@@ -1,5 +1,5 @@
 /**
- * Copyright 2024 The Fire Company
+ * Copyright 2024 Bloom Labs Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { type GenerationCommonConfigSchema, Genkit, type ModelReference } from 'genkit';
+import {
+  type GenerationCommonConfigSchema,
+  Genkit,
+  type ModelReference,
+} from 'genkit';
 import { genkitPlugin } from 'genkit/plugin';
 import { Mistral, SDKOptions } from '@mistralai/mistralai';
 import { mistralEmbedder, SUPPORTED_EMBEDDING_MODELS } from './embedders';
@@ -78,7 +82,10 @@ export interface PluginOptions extends SDKOptions {
    * ```
    *
    */
-  customModels?: Record<string, ModelReference<typeof GenerationCommonConfigSchema>>;
+  customModels?: Record<
+    string,
+    ModelReference<typeof GenerationCommonConfigSchema>
+  >;
 }
 
 export const mistral = (options?: PluginOptions) =>

@@ -11,19 +11,23 @@ Before reading further, please note that:
 
 ## Table of Contents
 
-1. [Code of Conduct](#code-of-conduct)
-2. [License](#license)
-3. [Questions](#questions)
-4. [Feature Requests](#feature-requests)
-5. [Reporting Bugs](#reporting-bugs)
-6. [Contributing with Code](#contributing-with-code)
-   1. [Getting Started](#getting-started)
-   2. [Finding an Issue](#finding-an-issue)
-   3. [Development Process](#development-process)
-   4. [Building the Project](#building-the-project)
-   5. [Testing](#testing)
-   6. [Automatic release draft with version bump labels](#automatic-release-draft-with-version-bump-labels)
-7. [About this document](#about-this-document)
+- [Contribution Guidelines](#contribution-guidelines)
+  - [Table of Contents](#table-of-contents)
+  - [Code of Conduct](#code-of-conduct)
+  - [License](#license)
+  - [Questions](#questions)
+  - [Feature Requests](#feature-requests)
+  - [Reporting Bugs](#reporting-bugs)
+  - [Contributing with code](#contributing-with-code)
+    - [Getting Started](#getting-started)
+      - [Option 1: Dev Container](#option-1-dev-container)
+      - [Option 2: Local install](#option-2-local-install)
+    - [Finding an Issue](#finding-an-issue)
+    - [Development Process](#development-process)
+    - [Building the Project](#building-the-project)
+    - [Testing](#testing)
+    - [Automatic release draft with version bump labels](#automatic-release-draft-with-version-bump-labels)
+  - [About this document](#about-this-document)
 
 ## Code of Conduct
 
@@ -35,7 +39,7 @@ By participating in this project and submitting contributions, you agree to lice
 
 ## Questions
 
-If you have any support questions, please open a [GitHub discussion](https://github.com/TheFireCo/genkit-plugins/discussions). The GitHub issue tracker is not for support-related requests.
+If you have any support questions, please open a [GitHub discussion](https://github.com/BloomLabsInc/genkit-plugins/discussions). The GitHub issue tracker is not for support-related requests.
 
 ## Feature Requests
 
@@ -47,7 +51,7 @@ Small Changes can directly be crafted and submitted to the GitHub Repository as 
 
 **If you discover a security vulnerability, do NOT open an issue. Email info@firecompany.co instead.**
 
-Before you submit your issue, please [search the issue archive](https://github.com/TheFireCo/genkit-plugins/issues) - your issue might have already been identified or addressed.
+Before you submit your issue, please [search the issue archive](https://github.com/BloomLabsInc/genkit-plugins/issues) - your issue might have already been identified or addressed.
 
 If you find a bug in the source code, you can help us by submitting an issue or, even better, you can submit a Pull Request with a fix.
 
@@ -78,7 +82,7 @@ You can set up the local development environment as follows:
 
 ### Finding an Issue
 
-The list of open feature requests and bugs can be found on our on our [GitHub issue tracker](https://github.com/TheFireCo/genkit-plugins/issues). Pick an unassigned issue that you think you can accomplish and add a comment that you are attempting to do it.
+The list of open feature requests and bugs can be found on our on our [GitHub issue tracker](https://github.com/BloomLabsInc/genkit-plugins/issues). Pick an unassigned issue that you think you can accomplish and add a comment that you are attempting to do it.
 
 ### Development Process
 

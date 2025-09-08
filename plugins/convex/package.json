@@ -21,10 +21,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TheFireCo/genkit-plugins.git",
+    "url": "https://github.com/BloomLabsInc/genkit-plugins.git",
     "directory": "plugins/convex"
   },
-  "author": "The Fire Company",
+  "author": "Bloom Labs Inc",
   "license": "Apache-2.0",
   "dependencies": {
     "zod": "^3.22.4"
