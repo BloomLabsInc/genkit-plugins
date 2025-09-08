@@ -30,6 +30,6 @@
     "uuid": "^11.0.2"
   },
   "optionalDependencies": {
-    "@nx/nx-linux-x64-gpu": "20.1.0"
+    "@nx/nx-linux-x64-gnu": "20.1.0"
   }
 }
