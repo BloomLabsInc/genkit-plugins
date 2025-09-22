@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import type { Genkit } from 'genkit';
-import { genkitPlugin } from 'genkit/plugin';
+import { genkitPluginV2 } from 'genkit/plugin';
 import Anthropic from '@anthropic-ai/sdk';
 
 import {
@@ -30,6 +29,8 @@ import {
   claudeModel,
   SUPPORTED_CLAUDE_MODELS,
 } from './claude.js';
+import { ModelAction } from 'genkit/model';
+import { ActionType } from 'genkit/registry';
 
 export {
   claude4Sonnet,
@@ -77,23 +78,46 @@ export interface PluginOptions {
  * ```
  */
 // TODO: add support for voyage embeddings and tool use (both not documented well in docs.anthropic.com)
-export const anthropic = (options?: PluginOptions) =>
-  genkitPlugin('anthropic', async (ai: Genkit) => {
-    let apiKey = options?.apiKey || process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      throw new Error(
-        'Please pass in the API key or set the ANTHROPIC_API_KEY environment variable'
-      );
-    }
-    let defaultHeaders = {};
-    if (options?.cacheSystemPrompt == true) {
-      defaultHeaders['anthropic-beta'] = 'prompt-caching-2024-07-31';
-    }
-    const client = new Anthropic({ apiKey, defaultHeaders });
+export const anthropic = (options?: PluginOptions) => {
+  let apiKey = options?.apiKey || process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error(
+      'Please pass in the API key or set the ANTHROPIC_API_KEY environment variable'
+    );
+  }
+  let defaultHeaders = {};
+  if (options?.cacheSystemPrompt == true) {
+    defaultHeaders['anthropic-beta'] = 'prompt-caching-2024-07-31';
+  }
+  const client = new Anthropic({ apiKey, defaultHeaders });
 
-    for (const name of Object.keys(SUPPORTED_CLAUDE_MODELS)) {
-      claudeModel(ai, name, client, options?.cacheSystemPrompt);
-    }
+  const cachedActions: ModelAction[] = [];
+
+  genkitPluginV2({
+    name: 'anthropic',
+    init: async () => {
+
+      const actions: ModelAction[] = [];
+      for (const name of Object.keys(SUPPORTED_CLAUDE_MODELS)) {
+        const action = claudeModel(name, client, options?.cacheSystemPrompt);
+        actions.push(action);
+        cachedActions.push(action);
+      }
+
+      return actions;
+    },
+    resolve: (actionType: ActionType, name: string) => {
+      if (actionType === 'model') {
+        return cachedActions.find((action) => action.name === name);
+      }
+    },
+    list: () => {
+      return cachedActions.map((action) => ({
+        name: action.name,
+        type: 'model',
+      }));
+    },
   });
+};
 
 export default anthropic;

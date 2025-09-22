@@ -22,7 +22,6 @@ import type {
   Part,
   Role,
   StreamingCallback,
-  Genkit,
   ModelReference,
 } from 'genkit';
 import { GenerationCommonConfigSchema } from 'genkit';
@@ -47,6 +46,7 @@ import type {
   MessageStreamEvent,
   ToolUseBlockParam,
 } from '@anthropic-ai/sdk/resources/messages.mjs';
+import { model } from 'genkit/plugin';
 
 export const AnthropicConfigSchema = GenerationCommonConfigSchema.extend({
   tool_choice: z
@@ -612,21 +612,19 @@ export function claudeRunner(
  * Defines a Claude model with the given name and Anthropic client.
  */
 export function claudeModel(
-  ai: Genkit,
   name: string,
   client: Anthropic,
   cacheSystemPrompt?: boolean
 ): ModelAction<typeof AnthropicConfigSchema> {
   const modelId = `anthropic/${name}`;
-  const model = SUPPORTED_CLAUDE_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_CLAUDE_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  return ai.defineModel(
+  return model(
     {
-      apiVersion: 'v2',
       name: modelId,
-      ...model.info,
-      configSchema: model.configSchema,
+      ...modelRef.info,
+      configSchema: modelRef.configSchema,
     },
     claudeRunner(name, client, cacheSystemPrompt)
   );
