@@ -1010,7 +1010,7 @@ describe('claudeModel', () => {
 
   it('should correctly define supported Claude models', () => {
     jest.spyOn(ai, 'defineModel').mockImplementation((() => ({})) as any);
-    claudeModel(ai, 'claude-3-5-haiku', {} as Anthropic);
+    claudeModel('claude-3-5-haiku', {} as Anthropic);
     expect(ai.defineModel).toHaveBeenCalledWith(
       {
         apiVersion: 'v2',
@@ -1024,7 +1024,7 @@ describe('claudeModel', () => {
 
   it('should throw for unsupported models', () => {
     expect(() =>
-      claudeModel(ai, 'unsupported-model', {} as Anthropic)
+      claudeModel('unsupported-model', {} as Anthropic)
     ).toThrowError('Unsupported model: unsupported-model');
   });
 });
