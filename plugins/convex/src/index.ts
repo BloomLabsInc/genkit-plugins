@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { EmbedderArgument } from '@genkit-ai/ai/embedder';
+import { EmbedderArgument } from 'genkit';
 
-import { genkitPlugin, PluginProvider } from '@genkit-ai/core';
+import { genkitPluginV2, PluginProvider } from 'genkit/plugin';
 import * as z from 'zod';
 
 interface Params<EmbedderCustomOptions extends z.ZodTypeAny> {
@@ -28,12 +28,12 @@ interface Params<EmbedderCustomOptions extends z.ZodTypeAny> {
 export function convexVectorstore<EmbedderCustomOptions extends z.ZodTypeAny>(
   params: Params<EmbedderCustomOptions>[]
 ): PluginProvider {
-  const plugin = genkitPlugin(
-    'convexVectorstore',
-    async (params: Params<EmbedderCustomOptions>[]) => ({
+  const plugin = genkitPluginV2({
+    name: 'convexVectorstore',
+    init: async (params: Params<EmbedderCustomOptions>[]) => ({
       // retrievers: params.map((p) => configureDevLocalRetriever(p)),
     })
-  );
+  });
   return plugin(params);
 }
 

@@ -16,10 +16,11 @@
 
 import type { Genkit } from 'genkit';
 import { z } from 'genkit';
-import { embedderRef } from 'genkit/embedder';
+import { embedderRef as createEmbedderRef } from 'genkit/embedder';
 import { CohereClient } from 'cohere-ai';
 
 import type { PluginOptions } from '.';
+import { embedder } from 'genkit/plugin';
 
 export const TextEmbeddingConfigSchema = z.object({
   // Its difficult with the schema to make this an array therefore its only a single string for now
@@ -51,7 +52,7 @@ export type TextEmbeddingGeckoConfig = z.infer<
 
 export const TextEmbeddingInputSchema = z.string();
 
-export const embedMultilingual4 = embedderRef({
+export const embedMultilingual4 = createEmbedderRef({
   name: 'cohere/embed-v4.0',
   configSchema: TextEmbeddingConfigSchema,
   info: {
@@ -63,7 +64,7 @@ export const embedMultilingual4 = embedderRef({
   },
 });
 
-export const embedEnglish3 = embedderRef({
+export const embedEnglish3 = createEmbedderRef({
   name: 'cohere/embed-english-v3.0',
   configSchema: TextEmbeddingConfigSchema,
   info: {
@@ -75,7 +76,7 @@ export const embedEnglish3 = embedderRef({
   },
 });
 
-export const embedMultilingual3 = embedderRef({
+export const embedMultilingual3 = createEmbedderRef({
   name: 'cohere/embed-multilingual-v3.0',
   configSchema: TextEmbeddingConfigSchema,
   info: {
@@ -87,7 +88,7 @@ export const embedMultilingual3 = embedderRef({
   },
 });
 
-export const embedEnglishLight3 = embedderRef({
+export const embedEnglishLight3 = createEmbedderRef({
   name: 'cohere/embed-english-light-v3.0',
   configSchema: TextEmbeddingConfigSchema,
   info: {
@@ -99,7 +100,7 @@ export const embedEnglishLight3 = embedderRef({
   },
 });
 
-export const embedMultilingualLight3 = embedderRef({
+export const embedMultilingualLight3 = createEmbedderRef({
   name: 'cohere/embed-multilingual-light-v3.0',
   configSchema: TextEmbeddingConfigSchema,
   info: {
@@ -120,7 +121,6 @@ export const SUPPORTED_EMBEDDING_MODELS = {
 };
 
 export function cohereEmbedder(
-  ai: Genkit,
   name: string,
   options?: PluginOptions
 ) {
@@ -129,16 +129,18 @@ export function cohereEmbedder(
     throw new Error(
       'please pass in the API key or set the COHERE_API_KEY environment variable'
     );
-  const model = SUPPORTED_EMBEDDING_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_EMBEDDING_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
   const client = new CohereClient({ token: apiKey });
-  return ai.defineEmbedder(
+  return embedder(
     {
-      info: model.info!,
+      info: modelRef.info!,
       configSchema: TextEmbeddingConfigSchema,
-      name: model.name,
+      name: modelRef.name,
     },
-    async (input, options) => {
+    async (request, _) => {
+      const { input, options } = request;
+
       const embeddings = await client.embed({
         model: name,
         texts: input.map((d) => {
