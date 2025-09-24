@@ -13,10 +13,11 @@
  * limitations under the License.
  */
 
-import type { GenerateRequest, GenerateResponseData, Genkit } from 'genkit';
+import type { GenerateRequest, GenerateResponseData } from 'genkit';
 import { GenerationCommonConfigSchema, Message, z } from 'genkit';
 import type { ModelAction } from 'genkit/model';
-import { modelRef } from 'genkit/model';
+import { modelRef as createModelRef } from 'genkit/model';
+import { model } from 'genkit/plugin';
 import type OpenAI from 'openai';
 import {
   type TranscriptionCreateParams,
@@ -31,7 +32,7 @@ export const Whisper1ConfigSchema = GenerationCommonConfigSchema.extend({
     .optional(),
 });
 
-export const whisper1 = modelRef({
+export const whisper1 = createModelRef({
   name: 'openai/whisper-1',
   info: {
     label: 'OpenAI - Whisper',
@@ -46,7 +47,7 @@ export const whisper1 = modelRef({
   configSchema: Whisper1ConfigSchema,
 });
 
-export const gpt4oTranscribe = modelRef({
+export const gpt4oTranscribe = createModelRef({
   name: 'openai/gpt-4o-transcribe',
   info: {
     label: 'OpenAI - GPT-4o Transcribe',
@@ -138,19 +139,18 @@ export const SUPPORTED_STT_MODELS = {
 };
 
 export function sttModel(
-  ai: Genkit,
   name: string,
   client: OpenAI
 ): ModelAction<typeof Whisper1ConfigSchema> {
   const modelId = `openai/${name}`;
-  const model = SUPPORTED_STT_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_STT_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  return ai.defineModel<typeof Whisper1ConfigSchema>(
+  return model<typeof Whisper1ConfigSchema>(
     {
       name: modelId,
-      ...model.info,
-      configSchema: model.configSchema,
+      ...modelRef.info,
+      configSchema: modelRef.configSchema,
     },
     async (request) => {
       const params = toWhisper1Request(request);

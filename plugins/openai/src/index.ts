@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Genkit } from 'genkit';
-import { genkitPlugin } from 'genkit/plugin';
+import { genkitPluginV2, ResolvableAction } from 'genkit/plugin';
 import { ClientOptions, OpenAI } from 'openai';
 
 import { ModelInfo } from 'genkit/model';
@@ -141,28 +140,35 @@ export interface ModelDefinition {
  * ```
  */
 export const openAI = (options?: PluginOptions) =>
-  genkitPlugin('openai', async (ai: Genkit) => {
-    const client = new OpenAI(options);
-    for (const name of Object.keys(SUPPORTED_GPT_MODELS)) {
-      gptModel(ai, name, client);
-    }
-    // Initialize the models if provided in the options
-    options?.models?.map((model) => {
-      if (!model.name || !model.info || !model.configSchema) {
-        throw new Error(`Model ${model.name} is missing required fields`);
-      }
-      gptModel(ai, model.name, client, model.info, model.configSchema);
-    });
+  genkitPluginV2({
+    name: 'openai',
+    init: () => {
+      const client = new OpenAI(options);
+      const actions: ResolvableAction[] = [];
 
-    dallE3Model(ai, client);
-    for (const name of Object.keys(SUPPORTED_STT_MODELS)) {
-      sttModel(ai, name, client);
-    }
-    for (const name of Object.keys(SUPPORTED_TTS_MODELS)) {
-      ttsModel(ai, name, client);
-    }
-    for (const name of Object.keys(SUPPORTED_EMBEDDING_MODELS)) {
-      openaiEmbedder(ai, name, options);
+      for (const name of Object.keys(SUPPORTED_GPT_MODELS)) {
+        actions.push(gptModel(name, client));
+      }
+      // Initialize the models if provided in the options
+      options?.models?.map((model) => {
+        if (!model.name || !model.info || !model.configSchema) {
+          throw new Error(`Model ${model.name} is missing required fields`);
+        }
+        actions.push(gptModel(model.name, client, model.info, model.configSchema));
+      });
+
+      actions.push(dallE3Model(client));
+      for (const name of Object.keys(SUPPORTED_STT_MODELS)) {
+        actions.push(sttModel(name, client));
+      }
+      for (const name of Object.keys(SUPPORTED_TTS_MODELS)) {
+        actions.push(ttsModel(name, client));
+      }
+      for (const name of Object.keys(SUPPORTED_EMBEDDING_MODELS)) {
+        actions.push(openaiEmbedder(name, options));
+      }
+
+      return actions;
     }
   });
 

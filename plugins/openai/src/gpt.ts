@@ -19,7 +19,6 @@ import type {
   StreamingCallback,
   GenerateRequest,
   GenerateResponseData,
-  Genkit,
   MessageData,
   ModelReference,
   Part,
@@ -32,7 +31,7 @@ import type {
   ModelAction,
   ToolDefinition,
 } from 'genkit/model';
-import { modelRef } from 'genkit/model';
+import { modelRef as createModelRef } from 'genkit/model';
 import type OpenAI from 'openai';
 import {
   type ChatCompletion,
@@ -45,6 +44,7 @@ import {
   type ChatCompletionTool,
   type CompletionChoice,
 } from 'openai/resources/index.mjs';
+import { model } from 'genkit/plugin';
 
 const MODELS_SUPPORTING_OPENAI_RESPONSE_FORMAT = [
   'gpt-4.5-preview',
@@ -86,7 +86,7 @@ type VisualDetailLevel = z.infer<
   typeof OpenAiConfigSchema
 >['visualDetailLevel'];
 
-export const gpt45 = modelRef({
+export const gpt45 = createModelRef({
   name: 'openai/gpt-4.5',
   info: {
     versions: ['gpt-4.5-preview'],
@@ -102,7 +102,7 @@ export const gpt45 = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt4o = modelRef({
+export const gpt4o = createModelRef({
   name: 'openai/gpt-4o',
   info: {
     versions: ['gpt-4o', 'gpt-4o-2024-05-13'],
@@ -118,7 +118,7 @@ export const gpt4o = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const o1Preview = modelRef({
+export const o1Preview = createModelRef({
   name: 'openai/o1-preview',
   info: {
     versions: ['o1-preview'],
@@ -134,7 +134,7 @@ export const o1Preview = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const o1Mini = modelRef({
+export const o1Mini = createModelRef({
   name: 'openai/o1',
   info: {
     versions: ['o1-mini'],
@@ -150,7 +150,7 @@ export const o1Mini = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const o1 = modelRef({
+export const o1 = createModelRef({
   name: 'openai/o1',
   info: {
     versions: ['o1'],
@@ -166,7 +166,7 @@ export const o1 = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const o3 = modelRef({
+export const o3 = createModelRef({
   name: 'openai/o3',
   info: {
     versions: ['o3'],
@@ -182,7 +182,7 @@ export const o3 = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const o3Mini = modelRef({
+export const o3Mini = createModelRef({
   name: 'openai/o3-mini',
   info: {
     versions: ['o3-mini'],
@@ -198,7 +198,7 @@ export const o3Mini = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const o4Mini = modelRef({
+export const o4Mini = createModelRef({
   name: 'openai/o4-mini',
   info: {
     versions: ['o4-mini'],
@@ -214,7 +214,7 @@ export const o4Mini = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt4oMini = modelRef({
+export const gpt4oMini = createModelRef({
   name: 'openai/gpt-4o-mini',
   info: {
     versions: ['gpt-4o-mini', 'gpt-4o-mini-2024-07-18'],
@@ -230,7 +230,7 @@ export const gpt4oMini = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt4Turbo = modelRef({
+export const gpt4Turbo = createModelRef({
   name: 'openai/gpt-4-turbo',
   info: {
     versions: [
@@ -252,7 +252,7 @@ export const gpt4Turbo = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt4Vision = modelRef({
+export const gpt4Vision = createModelRef({
   name: 'openai/gpt-4-vision',
   info: {
     versions: ['gpt-4-vision-preview', 'gpt-4-1106-vision-preview'],
@@ -268,7 +268,7 @@ export const gpt4Vision = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt4 = modelRef({
+export const gpt4 = createModelRef({
   name: 'openai/gpt-4',
   info: {
     versions: ['gpt-4', 'gpt-4-0613', 'gpt-4-32k', 'gpt-4-32k-0613'],
@@ -284,7 +284,7 @@ export const gpt4 = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt41 = modelRef({
+export const gpt41 = createModelRef({
   name: 'openai/gpt-4.1',
   info: {
     versions: ['gpt-4.1'],
@@ -300,7 +300,7 @@ export const gpt41 = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt41Mini = modelRef({
+export const gpt41Mini = createModelRef({
   name: 'openai/gpt-4.1-mini',
   info: {
     versions: ['gpt-4.1-mini'],
@@ -316,7 +316,7 @@ export const gpt41Mini = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt41Nano = modelRef({
+export const gpt41Nano = createModelRef({
   name: 'openai/gpt-4.1-nano',
   info: {
     versions: ['gpt-4.1-nano'],
@@ -332,7 +332,7 @@ export const gpt41Nano = modelRef({
   configSchema: OpenAiConfigSchema,
 });
 
-export const gpt35Turbo = modelRef({
+export const gpt35Turbo = createModelRef({
   name: 'openai/gpt-3.5-turbo',
   info: {
     versions: ['gpt-3.5-turbo-0125', 'gpt-3.5-turbo', 'gpt-3.5-turbo-1106'],
@@ -763,16 +763,15 @@ export function gptRunner(name: string, client: OpenAI) {
  * @throws An error if the specified model is not supported.
  */
 export function gptModel(
-  ai: Genkit,
   name: string,
   client: OpenAI,
   modelInfo?: ModelInfo,
   modelConfig?: any
 ): ModelAction<typeof OpenAiConfigSchema> {
   const modelId = `openai/${name}`;
-  const model = SUPPORTED_GPT_MODELS[name];
-  if (!model) {
-    SUPPORTED_GPT_MODELS[name] = modelRef({
+  const modelRef = SUPPORTED_GPT_MODELS[name];
+  if (!modelRef) {
+    SUPPORTED_GPT_MODELS[name] = createModelRef({
       name: modelId,
       info: modelInfo,
       configSchema: modelConfig?.configSchema,
@@ -780,17 +779,26 @@ export function gptModel(
   }
 
   // Use the built-in model info and config schema or override if provided
-  const modelInformation = modelInfo ? modelInfo : model.info;
+  const modelInformation = modelInfo ? modelInfo : modelRef.info;
   const configSchema = modelConfig
     ? modelConfig.configSchema
-    : model.configSchema;
+    : modelRef.configSchema;
 
-  return ai.defineModel(
+  return model(
     {
       name: modelId,
       ...modelInformation,
       configSchema,
     },
-    gptRunner(name, client)
+    // The gptRunner signature expects (request, streamingCallback?), but model expects (request, options?)
+    // So we wrap gptRunner to adapt the signature.
+    (request, options) => {
+      // If options is a function, treat as streamingCallback, else ignore.
+      // This ensures compatibility with the expected StreamingCallback signature.
+      if (typeof options === 'function') {
+        return gptRunner(name, client)(request, options);
+      }
+      return gptRunner(name, client)(request);
+    }
   );
 }

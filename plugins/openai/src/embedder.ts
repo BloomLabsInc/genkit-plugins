@@ -17,10 +17,10 @@
 // import { defineEmbedder, embedderRef } from '@genkit-ai/ai/embedder';
 
 import OpenAI from 'openai';
-import type { Genkit } from 'genkit';
-import { embedderRef, z } from 'genkit';
+import { embedderRef as createEmbedderRef, z } from 'genkit';
 
 import { type PluginOptions } from './index.js';
+import { embedder } from 'genkit/plugin';
 
 export const TextEmbeddingConfigSchema = z.object({
   dimensions: z.number().optional(),
@@ -33,7 +33,7 @@ export type TextEmbeddingGeckoConfig = z.infer<
 
 export const TextEmbeddingInputSchema = z.string();
 
-export const textEmbedding3Small = embedderRef({
+export const textEmbedding3Small = createEmbedderRef({
   name: 'openai/text-embedding-3-small',
   configSchema: TextEmbeddingConfigSchema,
   info: {
@@ -45,7 +45,7 @@ export const textEmbedding3Small = embedderRef({
   },
 });
 
-export const textEmbedding3Large = embedderRef({
+export const textEmbedding3Large = createEmbedderRef({
   name: 'openai/text-embedding-3-large',
   configSchema: TextEmbeddingConfigSchema,
   info: {
@@ -57,7 +57,7 @@ export const textEmbedding3Large = embedderRef({
   },
 });
 
-export const textEmbeddingAda002 = embedderRef({
+export const textEmbeddingAda002 = createEmbedderRef({
   name: 'openai/text-embedding-ada-002',
   configSchema: TextEmbeddingConfigSchema,
   info: {
@@ -76,7 +76,6 @@ export const SUPPORTED_EMBEDDING_MODELS = {
 };
 
 export function openaiEmbedder(
-  ai: Genkit,
   name: string,
   options?: PluginOptions
 ) {
@@ -85,17 +84,18 @@ export function openaiEmbedder(
     throw new Error(
       'please pass in the API key or set the OPENAI_API_KEY environment variable'
     );
-  const model = SUPPORTED_EMBEDDING_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_EMBEDDING_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
   const client = new OpenAI({ apiKey });
-  return ai.defineEmbedder(
+  return embedder(
     {
-      info: model.info!,
+      info: modelRef.info!,
       configSchema: TextEmbeddingConfigSchema,
-      name: model.name,
+      name: modelRef.name,
     },
-    async (input, options) => {
+    async (request, _) => {
+      const { input, options } = request;
       const embeddings = await client.embeddings.create({
         model: name,
         input: input.map((d) => d.text),
