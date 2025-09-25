@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import type { GenerateRequest, GenerateResponseData, Genkit } from 'genkit';
+import type { GenerateRequest, GenerateResponseData } from 'genkit';
 import { GenerationCommonConfigSchema, Message, z } from 'genkit';
 import type { ModelAction } from 'genkit/model';
 import { modelRef } from 'genkit/model';
+import { model } from 'genkit/plugin';
 import AzureOpenAI from 'openai';
 import {
   ImageGenerateParams,
@@ -93,10 +94,9 @@ function toGenerateResponse(result: ImagesResponse): GenerateResponseData {
 }
 
 export function dallE3Model(
-  ai: Genkit,
   client: AzureOpenAI
 ): ModelAction<typeof DallE3ConfigSchema> {
-  return ai.defineModel<typeof DallE3ConfigSchema>(
+  return model<typeof DallE3ConfigSchema>(
     {
       name: dallE3.name,
       ...dallE3.info,

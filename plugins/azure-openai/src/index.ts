@@ -15,7 +15,7 @@
  */
 
 import type { Genkit } from 'genkit';
-import { genkitPlugin } from 'genkit/plugin';
+import { genkitPluginV2, ResolvableAction } from 'genkit/plugin';
 import { AzureClientOptions, AzureOpenAI } from 'openai';
 
 import { dallE3, dallE3Model } from './dalle.js';
@@ -74,19 +74,25 @@ export {
 export interface PluginOptions extends AzureClientOptions {}
 
 export const azureOpenAI = (options?: PluginOptions) =>
-  genkitPlugin('azure-openai', async (ai: Genkit) => {
-    const client = new AzureOpenAI(options);
-    for (const name of Object.keys(SUPPORTED_GPT_MODELS)) {
-      gptModel(ai, name, client);
-    }
-    dallE3Model(ai, client);
-    whisper1Model(ai, client);
-    for (const name of Object.keys(SUPPORTED_TTS_MODELS)) {
-      ttsModel(ai, name, client);
-    }
-    for (const name of Object.keys(SUPPORTED_EMBEDDING_MODELS)) {
-      openaiEmbedder(ai, name, client);
-    }
+  genkitPluginV2({
+    name: 'azure-openai',
+    init: async () => {
+      const client = new AzureOpenAI(options);
+      const actions: ResolvableAction[] = [];
+      
+      for (const name of Object.keys(SUPPORTED_GPT_MODELS)) {
+        actions.push(gptModel(name, client));
+      }
+      actions.push(dallE3Model(client));
+      actions.push(whisper1Model(client));
+      for (const name of Object.keys(SUPPORTED_TTS_MODELS)) {
+        actions.push(ttsModel(name, client));
+      }
+      for (const name of Object.keys(SUPPORTED_EMBEDDING_MODELS)) {
+        actions.push(openaiEmbedder(name, client));
+      }
+      return [];
+    },
   });
 
 export default azureOpenAI;

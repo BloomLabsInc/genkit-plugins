@@ -16,6 +16,7 @@
 
 import type { Genkit } from 'genkit';
 import { embedderRef, z } from 'genkit';
+import { embedder } from 'genkit/plugin';
 import { AzureOpenAI } from 'openai';
 
 export const TextEmbeddingConfigSchema = z.object({
@@ -71,17 +72,19 @@ export const SUPPORTED_EMBEDDING_MODELS = {
   'text-embedding-ada-002': textEmbeddingAda002,
 };
 
-export function openaiEmbedder(ai: Genkit, name: string, client: AzureOpenAI) {
-  const model = SUPPORTED_EMBEDDING_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+export function openaiEmbedder(name: string, client: AzureOpenAI) {
+  const modelRef = SUPPORTED_EMBEDDING_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  return ai.defineEmbedder(
+  return embedder(
     {
-      info: model.info!,
+      info: modelRef.info!,
       configSchema: TextEmbeddingConfigSchema,
-      name: model.name,
+      name: modelRef.name,
     },
-    async (input, options) => {
+    async (request) => {
+      const { input, options } = request;
+
       const embeddings = await client.embeddings.create({
         model: name,
         input: input.map((d) => d.text),

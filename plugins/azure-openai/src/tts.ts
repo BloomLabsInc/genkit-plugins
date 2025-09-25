@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { GenerateRequest, GenerateResponseData, Genkit } from 'genkit';
+import type { GenerateRequest, GenerateResponseData } from 'genkit';
 import { GenerationCommonConfigSchema, Message, z } from 'genkit';
 import type { ModelAction } from 'genkit/model';
 import { modelRef } from 'genkit/model';
+import { model } from 'genkit/plugin';
 import type AzureOpenAI from 'openai';
 import { type SpeechCreateParams } from 'openai/resources/audio/index.mjs';
 
@@ -122,19 +123,18 @@ function toGenerateResponse(
 }
 
 export function ttsModel(
-  ai: Genkit,
   name: string,
   client: AzureOpenAI
 ): ModelAction<typeof TTSConfigSchema> {
   const modelId = `azure-openai/${name}`;
-  const model = SUPPORTED_TTS_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_TTS_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  return ai.defineModel<typeof TTSConfigSchema>(
+  return model<typeof TTSConfigSchema>(
     {
       name: modelId,
-      ...model.info,
-      configSchema: model.configSchema,
+      ...modelRef.info,
+      configSchema: modelRef.configSchema,
     },
     async (request) => {
       const ttsRequest = toTTSRequest(name, request);

@@ -17,19 +17,17 @@
 import { GenerationCommonConfigSchema, Message, z } from 'genkit';
 import type {
   GenerateRequest,
-  Genkit,
   MessageData,
   Part,
   Role,
-  StreamingCallback,
   ToolRequestPart,
 } from 'genkit';
 import {
   CandidateData,
-  GenerateResponseChunkData,
   modelRef,
   ToolDefinition,
 } from 'genkit/model';
+import { model } from 'genkit/plugin';
 import { AzureOpenAI } from 'openai';
 import {
   type ChatCompletion,
@@ -628,24 +626,24 @@ export function toOpenAiRequestBody(
 /**
  *
  */
-export function gptModel(ai: Genkit, name: string, client: AzureOpenAI) {
+export function gptModel(name: string, client: AzureOpenAI) {
   const modelId = `azure-openai/${name}`;
-  const model = SUPPORTED_GPT_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_GPT_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  return ai.defineModel(
+  return model(
     {
       name: modelId,
-      ...model.info,
+      ...modelRef.info,
       configSchema: SUPPORTED_GPT_MODELS[name].configSchema,
     },
     async (
-      request,
-      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
+      options,
+      request
     ) => {
       let response: ChatCompletion;
-      const body = toOpenAiRequestBody(name, request);
-      if (streamingCallback) {
+      const body = toOpenAiRequestBody(name, options);
+      if (request.sendChunk) {
         const stream = client.beta.chat.completions.stream({
           ...body,
           stream: true,
@@ -656,7 +654,7 @@ export function gptModel(ai: Genkit, name: string, client: AzureOpenAI) {
         for await (const chunk of stream) {
           chunk.choices?.forEach((chunk) => {
             const c = fromOpenAiChunkChoice(chunk);
-            streamingCallback({
+            request.sendChunk({
               index: c.index,
               content: c.message.content,
             });
@@ -668,7 +666,7 @@ export function gptModel(ai: Genkit, name: string, client: AzureOpenAI) {
       }
       return {
         candidates: response.choices.map((c) =>
-          fromOpenAiChoice(c, request.output?.format === 'json')
+          fromOpenAiChoice(c, options.output?.format === 'json')
         ),
         usage: {
           inputTokens: response.usage?.prompt_tokens,

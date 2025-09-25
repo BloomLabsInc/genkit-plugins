@@ -30,7 +30,7 @@
     "openai": "^4.95.0"
   },
   "peerDependencies": {
-    "genkit": "^0.9.0 || ^1.0.0"
+    "genkit": "^1.19.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",

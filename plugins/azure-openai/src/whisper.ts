@@ -13,10 +13,11 @@
  * limitations under the License.
  */
 
-import type { GenerateRequest, GenerateResponseData, Genkit } from 'genkit';
+import type { GenerateRequest, GenerateResponseData } from 'genkit';
 import { GenerationCommonConfigSchema, Message, z } from 'genkit';
 import type { ModelAction } from 'genkit/model';
 import { modelRef } from 'genkit/model';
+import { model } from 'genkit/plugin';
 import type AzureOpenAI from 'openai';
 import {
   type Transcription,
@@ -118,18 +119,17 @@ function toGenerateResponse(
 }
 
 export function whisper1Model(
-  ai: Genkit,
   client: AzureOpenAI
 ): ModelAction<typeof Whisper1ConfigSchema> {
-  return ai.defineModel<typeof Whisper1ConfigSchema>(
+  return model<typeof Whisper1ConfigSchema>(
     {
       name: whisper1.name,
       ...whisper1.info,
       configSchema: whisper1.configSchema,
     },
-    async (request) => {
+    async (options) => {
       const result = await client.audio.transcriptions.create(
-        toWhisper1Request(request)
+        toWhisper1Request(options)
       );
       return toGenerateResponse(result);
     }
