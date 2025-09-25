@@ -16,13 +16,13 @@
 import { Mistral } from '@mistralai/mistralai';
 import {
   OCRRequest,
-  Document as OCRDDocument,
   OCRResponse,
 } from '@mistralai/mistralai/models/components';
-import type { GenerateRequest, GenerateResponseData, Genkit } from 'genkit';
+import type { GenerateRequest, GenerateResponseData } from 'genkit';
 import { GenerationCommonConfigSchema, z } from 'genkit';
 import type { ModelAction } from 'genkit/model';
 import { modelRef } from 'genkit/model';
+import { model } from 'genkit/plugin';
 
 const ImageURLSchema = z.object({
   url: z.string(),
@@ -108,10 +108,9 @@ function toGenerateResponse(result: OCRResponse): GenerateResponseData {
 }
 
 export function OCRModel(
-  ai: Genkit,
   client: Mistral
 ): ModelAction<typeof OCRSchema> {
-  return ai.defineModel<typeof OCRSchema>(
+  return model<typeof OCRSchema>(
     {
       name: ocr.name,
       ...ocr.info,

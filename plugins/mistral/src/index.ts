@@ -16,10 +16,9 @@
 
 import {
   type GenerationCommonConfigSchema,
-  Genkit,
   type ModelReference,
 } from 'genkit';
-import { genkitPlugin } from 'genkit/plugin';
+import { genkitPluginV2, ResolvableAction } from 'genkit/plugin';
 import { Mistral, SDKOptions } from '@mistralai/mistralai';
 import { mistralEmbedder, SUPPORTED_EMBEDDING_MODELS } from './embedders';
 import { SUPPORTED_MISTRAL_MODELS, mistralModel } from './mistral_llms';
@@ -89,35 +88,41 @@ export interface PluginOptions extends SDKOptions {
 }
 
 export const mistral = (options?: PluginOptions) =>
-  genkitPlugin('mistral', async (ai: Genkit) => {
-    let apiKey = options?.apiKey || process.env.MISTRAL_API_KEY;
-    if (!apiKey) {
-      throw new Error(
-        'Please pass in the API key or set the MISTRAL_API_KEY environment variable'
-      );
-    }
+  genkitPluginV2({
+    name: 'mistral',
+    init: async () => {
+      let apiKey = options?.apiKey || process.env.MISTRAL_API_KEY;
+      if (!apiKey) {
+        throw new Error(
+          'Please pass in the API key or set the MISTRAL_API_KEY environment variable'
+        );
+      }
 
-    // If we have custom models, add them to the SUPPORTED_MISTRAL_MODELS
-    let customModels = options?.customModels || {};
-    if (Object.keys(customModels).length > 0) {
-      for (const [name, model] of Object.entries(customModels)) {
-        if (model) {
-          SUPPORTED_MISTRAL_MODELS[name] = model;
+      // If we have custom models, add them to the SUPPORTED_MISTRAL_MODELS
+      let customModels = options?.customModels || {};
+      if (Object.keys(customModels).length > 0) {
+        for (const [name, model] of Object.entries(customModels)) {
+          if (model) {
+            SUPPORTED_MISTRAL_MODELS[name] = model;
+          }
         }
       }
-    }
 
-    const client = new Mistral(options);
+      const client = new Mistral(options);
+      const actions: ResolvableAction[] = [];
 
-    for (const name of Object.keys(SUPPORTED_MISTRAL_MODELS)) {
-      mistralModel(ai, name, client);
-    }
+      for (const name of Object.keys(SUPPORTED_MISTRAL_MODELS)) {
+        actions.push(mistralModel(name, client));
+      }
 
-    for (const name of Object.keys(SUPPORTED_EMBEDDING_MODELS)) {
-      mistralEmbedder(ai, name, client);
-    }
+      for (const name of Object.keys(SUPPORTED_EMBEDDING_MODELS)) {
+        actions.push(mistralEmbedder(name, client));
+      }
 
-    OCRModel(ai, client);
+      actions.push(OCRModel(client));
+
+      return actions;
+    },
   });
 
 export default mistral;

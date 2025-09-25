@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { Message, Part, StreamingCallback } from 'genkit';
+import { Message, Part } from 'genkit';
 import {
   CandidateData,
   GenerateRequest,
-  GenerateResponseChunkData,
   MessageData,
   ModelAction,
   Role,
@@ -35,9 +34,9 @@ import {
   ChatCompletionResponse,
   ContentChunk,
 } from '@mistralai/mistralai/models/components/index.js';
-import { Genkit } from 'genkit';
 import { z } from 'genkit';
 import { Mistral } from '@mistralai/mistralai';
+import { model } from 'genkit/plugin';
 
 export const MistralConfigSchema = GenerationCommonConfigSchema.extend({
   visualDetailLevel: z.enum(['auto', 'low', 'high']).optional(),
@@ -485,33 +484,32 @@ export function toMistralRequestBody(
 }
 
 export function mistralModel(
-  ai: Genkit,
   name: string,
   client: Mistral
 ): ModelAction<typeof GenerationCommonConfigSchema> {
   //Ugly any type, should be MistralClient but cannot import it here
   const modelId = `mistral/${name}`;
-  const model = SUPPORTED_MISTRAL_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_MISTRAL_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  return ai.defineModel(
+  return model(
     {
       name: modelId,
-      ...model.info,
+      ...modelRef.info,
       configSchema: SUPPORTED_MISTRAL_MODELS[name].configSchema,
     },
     async (
+      options,
       request,
-      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
     ) => {
       let response: ChatCompletionResponse | CompletionChunk;
-      const body = toMistralRequestBody(name, request);
-      if (streamingCallback) {
+      const body = toMistralRequestBody(name, options);
+      if (request.sendChunk) {
         const stream = await client.chat.stream(body);
         for await (const chunk of stream) {
           chunk.data.choices?.forEach((choice) => {
             const c = fromMistralChunkChoice(choice);
-            streamingCallback({
+            request.sendChunk({
               index: c.index,
               content: c.message.content,
             });
