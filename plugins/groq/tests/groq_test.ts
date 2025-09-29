@@ -7,6 +7,7 @@ import {
   toGroqMessages,
 } from '../src/groq_models';
 import { ChatCompletionCreateParamsBase } from 'groq-sdk/resources/chat/completions.mjs';
+import { groq } from '../src/index';
 
 describe('toGroqRole', () => {
   it('should convert user role correctly', () => {
@@ -95,5 +96,47 @@ describe('toGroqRequestBody', () => {
     assert.throws(() => toGroqRequestBody('unsupported-model', request), {
       message: 'Unsupported model: unsupported-model',
     });
+  });
+});
+
+describe('Groq Plugin', () => {
+  it('should create plugin with v2 API', () => {
+    const plugin = groq({ apiKey: 'test-key' });
+
+    // Check that the plugin has the expected structure
+    assert.strictEqual(plugin.name, 'groq');
+    assert(typeof plugin.init === 'function');
+    assert(typeof plugin.list === 'function');
+  });
+
+  it('should list available models', async () => {
+    const plugin = groq({ apiKey: 'test-key' });
+    const models = await plugin.list?.();
+
+    // Check that we get a list of models
+    assert(Array.isArray(models));
+    assert(models.length > 0);
+
+    // Check that each model has the expected structure
+    for (const model of models) {
+      assert.strictEqual((model as any).type, 'model');
+      assert(typeof model.name === 'string');
+      assert(model.name.startsWith('groq/'));
+      assert(typeof (model as any).info === 'object');
+    }
+  });
+
+  it('should initialize models', async () => {
+    const plugin = groq({ apiKey: 'test-key' });
+    const models = await plugin.init?.();
+
+    // Check that we get an array of model actions
+    assert(Array.isArray(models));
+    assert(models.length > 0);
+
+    // Check that each model is a function (action)
+    for (const model of models) {
+      assert(typeof model === 'function');
+    }
   });
 });
