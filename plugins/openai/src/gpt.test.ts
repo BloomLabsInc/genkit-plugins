@@ -1358,10 +1358,10 @@ describe('gptRunner', () => {
 });
 
 describe('gptModel', () => {
-  let model: ModelAction;
+  let mockModel: jest.Mock;
 
   beforeEach(() => {
-    model = jest.fn();
+    mockModel = jest.fn();
   });
 
   afterEach(() => {
@@ -1369,9 +1369,9 @@ describe('gptModel', () => {
   });
 
   it('should correctly define supported GPT models', () => {
-    jest.spyOn(model, 'model').mockImplementation((() => ({})) as any);
+    jest.spyOn(require('./gpt'), 'model').mockImplementation(mockModel);
     gptModel('gpt-4o', {} as OpenAI);
-    expect(model).toHaveBeenCalledWith(
+    expect(mockModel).toHaveBeenCalledWith(
       {
         name: gpt4o.name,
         ...gpt4o.info,
@@ -1382,9 +1382,9 @@ describe('gptModel', () => {
   });
 
   it('should correctly define gpt-4.1, gpt-4.1-mini, and gpt-4.1-nano', () => {
-    jest.spyOn(model, 'model').mockImplementation((() => ({})) as any);
+    jest.spyOn(require('./gpt'), 'model').mockImplementation(mockModel);
     gptModel('gpt-4.1', {} as OpenAI);
-    expect(model).toHaveBeenCalledWith(
+    expect(mockModel).toHaveBeenCalledWith(
       {
         name: 'openai/gpt-4.1',
         ...require('./gpt').gpt41.info,
@@ -1393,7 +1393,7 @@ describe('gptModel', () => {
       expect.any(Function)
     );
     gptModel('gpt-4.1-mini', {} as OpenAI);
-    expect(model).toHaveBeenCalledWith(
+    expect(mockModel).toHaveBeenCalledWith(
       {
         name: 'openai/gpt-4.1-mini',
         ...require('./gpt').gpt41Mini.info,
@@ -1402,7 +1402,7 @@ describe('gptModel', () => {
       expect.any(Function)
     );
     gptModel('gpt-4.1-nano', {} as OpenAI);
-    expect(model).toHaveBeenCalledWith(
+    expect(mockModel).toHaveBeenCalledWith(
       {
         name: 'openai/gpt-4.1-nano',
         ...require('./gpt').gpt41Nano.info,

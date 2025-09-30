@@ -33,7 +33,7 @@ export const Whisper1ConfigSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const whisper1 = createModelRef({
-  name: 'openai/whisper-1',
+  name: 'whisper-1',
   info: {
     label: 'OpenAI - Whisper',
     supports: {
@@ -48,7 +48,7 @@ export const whisper1 = createModelRef({
 });
 
 export const gpt4oTranscribe = createModelRef({
-  name: 'openai/gpt-4o-transcribe',
+  name: 'gpt-4o-transcribe',
   info: {
     label: 'OpenAI - GPT-4o Transcribe',
     supports: {
@@ -142,7 +142,7 @@ export function sttModel(
   name: string,
   client: OpenAI
 ): ModelAction<typeof Whisper1ConfigSchema> {
-  const modelId = `openai/${name}`;
+  const modelId = `${name}`;
   const modelRef = SUPPORTED_STT_MODELS[name];
   if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 

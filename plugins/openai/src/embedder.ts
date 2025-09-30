@@ -34,7 +34,7 @@ export type TextEmbeddingGeckoConfig = z.infer<
 export const TextEmbeddingInputSchema = z.string();
 
 export const textEmbedding3Small = createEmbedderRef({
-  name: 'openai/text-embedding-3-small',
+  name: 'text-embedding-3-small',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 1536,
@@ -46,7 +46,7 @@ export const textEmbedding3Small = createEmbedderRef({
 });
 
 export const textEmbedding3Large = createEmbedderRef({
-  name: 'openai/text-embedding-3-large',
+  name: 'text-embedding-3-large',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 3072,
@@ -58,7 +58,7 @@ export const textEmbedding3Large = createEmbedderRef({
 });
 
 export const textEmbeddingAda002 = createEmbedderRef({
-  name: 'openai/text-embedding-ada-002',
+  name: 'text-embedding-ada-002',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 1536,

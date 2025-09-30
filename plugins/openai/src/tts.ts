@@ -33,7 +33,7 @@ export const TTSConfigSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const tts1 = createModelRef({
-  name: 'openai/tts-1',
+  name: 'tts-1',
   info: {
     label: 'OpenAI - Text-to-speech 1',
     supports: {
@@ -48,7 +48,7 @@ export const tts1 = createModelRef({
 });
 
 export const tts1Hd = createModelRef({
-  name: 'openai/tts-1-hd',
+  name: 'tts-1-hd',
   info: {
     label: 'OpenAI - Text-to-speech 1 HD',
     supports: {
@@ -63,7 +63,7 @@ export const tts1Hd = createModelRef({
 });
 
 export const gpt4oMiniTts = createModelRef({
-  name: 'openai/gpt-4o-mini-tts',
+  name: 'gpt-4o-mini-tts',
   info: {
     label: 'OpenAI - GPT-4o Mini Text-to-speech',
     supports: {
@@ -142,7 +142,7 @@ export function ttsModel(
   name: string,
   client: OpenAI
 ): ModelAction<typeof TTSConfigSchema> {
-  const modelId = `openai/${name}`;
+  const modelId = `${name}`;
   const modelRef = SUPPORTED_TTS_MODELS[name];
   if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 

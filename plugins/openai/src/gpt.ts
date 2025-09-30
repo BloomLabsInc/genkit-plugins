@@ -87,7 +87,7 @@ type VisualDetailLevel = z.infer<
 >['visualDetailLevel'];
 
 export const gpt45 = createModelRef({
-  name: 'openai/gpt-4.5',
+  name: 'gpt-4.5',
   info: {
     versions: ['gpt-4.5-preview'],
     label: 'OpenAI - GPT-4.5',
@@ -103,7 +103,7 @@ export const gpt45 = createModelRef({
 });
 
 export const gpt4o = createModelRef({
-  name: 'openai/gpt-4o',
+  name: 'gpt-4o',
   info: {
     versions: ['gpt-4o', 'gpt-4o-2024-05-13'],
     label: 'OpenAI - GPT-4o',
@@ -119,7 +119,7 @@ export const gpt4o = createModelRef({
 });
 
 export const o1Preview = createModelRef({
-  name: 'openai/o1-preview',
+  name: 'o1-preview',
   info: {
     versions: ['o1-preview'],
     label: 'OpenAI - o1 Preview',
@@ -135,7 +135,7 @@ export const o1Preview = createModelRef({
 });
 
 export const o1Mini = createModelRef({
-  name: 'openai/o1',
+  name: 'o1',
   info: {
     versions: ['o1-mini'],
     label: 'OpenAI - o1 Mini',
@@ -151,7 +151,7 @@ export const o1Mini = createModelRef({
 });
 
 export const o1 = createModelRef({
-  name: 'openai/o1',
+  name: 'o1',
   info: {
     versions: ['o1'],
     label: 'OpenAI - o1',
@@ -167,7 +167,7 @@ export const o1 = createModelRef({
 });
 
 export const o3 = createModelRef({
-  name: 'openai/o3',
+  name: 'o3',
   info: {
     versions: ['o3'],
     label: 'OpenAI - o3',
@@ -183,7 +183,7 @@ export const o3 = createModelRef({
 });
 
 export const o3Mini = createModelRef({
-  name: 'openai/o3-mini',
+  name: 'o3-mini',
   info: {
     versions: ['o3-mini'],
     label: 'OpenAI - o3 Mini',
@@ -199,7 +199,7 @@ export const o3Mini = createModelRef({
 });
 
 export const o4Mini = createModelRef({
-  name: 'openai/o4-mini',
+  name: 'o4-mini',
   info: {
     versions: ['o4-mini'],
     label: 'OpenAI - o4 Mini',
@@ -215,7 +215,7 @@ export const o4Mini = createModelRef({
 });
 
 export const gpt4oMini = createModelRef({
-  name: 'openai/gpt-4o-mini',
+  name: 'gpt-4o-mini',
   info: {
     versions: ['gpt-4o-mini', 'gpt-4o-mini-2024-07-18'],
     label: 'OpenAI - GPT-4o mini',
@@ -231,7 +231,7 @@ export const gpt4oMini = createModelRef({
 });
 
 export const gpt4Turbo = createModelRef({
-  name: 'openai/gpt-4-turbo',
+  name: 'gpt-4-turbo',
   info: {
     versions: [
       'gpt-4-turbo',
@@ -253,7 +253,7 @@ export const gpt4Turbo = createModelRef({
 });
 
 export const gpt4Vision = createModelRef({
-  name: 'openai/gpt-4-vision',
+  name: 'gpt-4-vision',
   info: {
     versions: ['gpt-4-vision-preview', 'gpt-4-1106-vision-preview'],
     label: 'OpenAI - GPT-4 Vision',
@@ -269,7 +269,7 @@ export const gpt4Vision = createModelRef({
 });
 
 export const gpt4 = createModelRef({
-  name: 'openai/gpt-4',
+  name: 'gpt-4',
   info: {
     versions: ['gpt-4', 'gpt-4-0613', 'gpt-4-32k', 'gpt-4-32k-0613'],
     label: 'OpenAI - GPT-4',
@@ -285,7 +285,7 @@ export const gpt4 = createModelRef({
 });
 
 export const gpt41 = createModelRef({
-  name: 'openai/gpt-4.1',
+  name: 'gpt-4.1',
   info: {
     versions: ['gpt-4.1'],
     label: 'OpenAI - GPT-4.1',
@@ -301,7 +301,7 @@ export const gpt41 = createModelRef({
 });
 
 export const gpt41Mini = createModelRef({
-  name: 'openai/gpt-4.1-mini',
+  name: 'gpt-4.1-mini',
   info: {
     versions: ['gpt-4.1-mini'],
     label: 'OpenAI - GPT-4.1 Mini',
@@ -317,7 +317,7 @@ export const gpt41Mini = createModelRef({
 });
 
 export const gpt41Nano = createModelRef({
-  name: 'openai/gpt-4.1-nano',
+  name: 'gpt-4.1-nano',
   info: {
     versions: ['gpt-4.1-nano'],
     label: 'OpenAI - GPT-4.1 Nano',
@@ -333,7 +333,7 @@ export const gpt41Nano = createModelRef({
 });
 
 export const gpt35Turbo = createModelRef({
-  name: 'openai/gpt-3.5-turbo',
+  name: 'gpt-3.5-turbo',
   info: {
     versions: ['gpt-3.5-turbo-0125', 'gpt-3.5-turbo', 'gpt-3.5-turbo-1106'],
     label: 'OpenAI - GPT-3.5 Turbo',
@@ -768,7 +768,7 @@ export function gptModel(
   modelInfo?: ModelInfo,
   modelConfig?: any
 ): ModelAction<typeof OpenAiConfigSchema> {
-  const modelId = `openai/${name}`;
+  const modelId = `${name}`;
   const modelRef = SUPPORTED_GPT_MODELS[name];
   if (!modelRef) {
     SUPPORTED_GPT_MODELS[name] = createModelRef({

@@ -33,7 +33,7 @@ export const DallE3ConfigSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const dallE3 = modelRef({
-  name: 'openai/dall-e-3',
+  name: 'dall-e-3',
   info: {
     label: 'OpenAI - DALL-E 3',
     supports: {
