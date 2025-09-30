@@ -55,7 +55,7 @@ export function mistralEmbedder(name: string, client: Mistral) {
 }
 
 export const mistralembed = embedderRef({
-  name: 'mistral/mistral-embed',
+  name: 'mistral-embed',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 1024,

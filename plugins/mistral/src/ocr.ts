@@ -39,7 +39,7 @@ const OCRSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const ocr = modelRef({
-  name: 'mistral/ocr',
+  name: 'ocr',
   info: {
     versions: ['mistral-ocr-latest'],
     label: 'Mistral - OCR',

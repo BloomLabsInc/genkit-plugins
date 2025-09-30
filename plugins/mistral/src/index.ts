@@ -52,7 +52,7 @@ export interface PluginOptions extends SDKOptions {
    * @example
    * ```ts
    * const customModel = modelRef({
-   *   name: 'mistral/custom-model',
+   *   name: 'custom-model',
    *   info: {
    *     versions: ['custom-model'],
    *     label: 'Custom Model',
