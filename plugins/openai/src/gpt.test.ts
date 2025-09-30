@@ -22,8 +22,8 @@ import type {
   ChatCompletionRole,
 } from 'openai/resources/index.mjs';
 import type OpenAI from 'openai';
-import type { GenerateRequest, Genkit, MessageData, Part, Role } from 'genkit';
-import type { CandidateData, ModelAction } from 'genkit/model';
+import type { GenerateRequest, MessageData, Part, Role } from 'genkit';
+import type { CandidateData } from 'genkit/model';
 
 import {
   gpt4o,
@@ -39,9 +39,9 @@ import {
 } from './gpt';
 import type { OpenAiConfigSchema } from './gpt';
 
-jest.mock('@genkit-ai/ai/model', () => ({
-  ...jest.requireActual('@genkit-ai/ai/model'),
-  defineModel: jest.fn(),
+jest.mock('genkit/plugin', () => ({
+  ...jest.requireActual('genkit/plugin'),
+  model: jest.fn(() => ({})),
 }));
 
 describe('toOpenAIRole', () => {
@@ -1358,20 +1358,15 @@ describe('gptRunner', () => {
 });
 
 describe('gptModel', () => {
-  let mockModel: jest.Mock;
-
-  beforeEach(() => {
-    mockModel = jest.fn();
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('should correctly define supported GPT models', () => {
-    jest.spyOn(require('./gpt'), 'model').mockImplementation(mockModel);
+    const { model } = jest.requireMock('genkit/plugin');
+
     gptModel('gpt-4o', {} as OpenAI);
-    expect(mockModel).toHaveBeenCalledWith(
+    expect(model).toHaveBeenCalledWith(
       {
         name: gpt4o.name,
         ...gpt4o.info,
@@ -1382,29 +1377,30 @@ describe('gptModel', () => {
   });
 
   it('should correctly define gpt-4.1, gpt-4.1-mini, and gpt-4.1-nano', () => {
-    jest.spyOn(require('./gpt'), 'model').mockImplementation(mockModel);
+    const { model } = jest.requireMock('genkit/plugin');
+
     gptModel('gpt-4.1', {} as OpenAI);
-    expect(mockModel).toHaveBeenCalledWith(
+    expect(model).toHaveBeenCalledWith(
       {
-        name: 'openai/gpt-4.1',
+        name: 'gpt-4.1',
         ...require('./gpt').gpt41.info,
         configSchema: require('./gpt').gpt41.configSchema,
       },
       expect.any(Function)
     );
     gptModel('gpt-4.1-mini', {} as OpenAI);
-    expect(mockModel).toHaveBeenCalledWith(
+    expect(model).toHaveBeenCalledWith(
       {
-        name: 'openai/gpt-4.1-mini',
+        name: 'gpt-4.1-mini',
         ...require('./gpt').gpt41Mini.info,
         configSchema: require('./gpt').gpt41Mini.configSchema,
       },
       expect.any(Function)
     );
     gptModel('gpt-4.1-nano', {} as OpenAI);
-    expect(mockModel).toHaveBeenCalledWith(
+    expect(model).toHaveBeenCalledWith(
       {
-        name: 'openai/gpt-4.1-nano',
+        name: 'gpt-4.1-nano',
         ...require('./gpt').gpt41Nano.info,
         configSchema: require('./gpt').gpt41Nano.configSchema,
       },
