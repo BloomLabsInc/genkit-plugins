@@ -33,7 +33,7 @@ export const Whisper1ConfigSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const whisper1 = modelRef({
-  name: 'azure-openai/whisper-1',
+  name: 'whisper-1',
   info: {
     label: 'OpenAI - Whisper',
     supports: {

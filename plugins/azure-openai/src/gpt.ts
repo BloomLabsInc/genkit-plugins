@@ -77,7 +77,7 @@ export const OpenAiConfigSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const gpt4o = modelRef({
-  name: 'azure-openai/gpt-4o',
+  name: 'gpt-4o',
   info: {
     versions: ['gpt-4o'],
     label: 'OpenAI - GPT-4o',
@@ -93,7 +93,7 @@ export const gpt4o = modelRef({
 });
 
 export const gpt4oMini = modelRef({
-  name: 'azure-openai/gpt-4o-mini',
+  name: 'gpt-4o-mini',
   info: {
     versions: ['gpt-4o-mini'],
     label: 'OpenAI - GPT-4o Mini',
@@ -109,7 +109,7 @@ export const gpt4oMini = modelRef({
 });
 
 export const gpt4 = modelRef({
-  name: 'azure-openai/gpt-4',
+  name: 'gpt-4',
   info: {
     versions: ['gpt-4', 'gpt-4-32k'],
     label: 'OpenAI - GPT-4',
@@ -125,7 +125,7 @@ export const gpt4 = modelRef({
 });
 
 export const gpt45 = modelRef({
-  name: 'azure-openai/gpt-4.5',
+  name: 'gpt-4.5',
   info: {
     versions: ['gpt-4.5-preview'],
     label: 'OpenAI - GPT-4.5',
@@ -141,7 +141,7 @@ export const gpt45 = modelRef({
 });
 
 export const gpt41 = modelRef({
-  name: 'azure-openai/gpt-4.1',
+  name: 'gpt-4.1',
   info: {
     versions: ['gpt-4.1'],
     label: 'OpenAI - GPT-4.1',
@@ -157,7 +157,7 @@ export const gpt41 = modelRef({
 });
 
 export const gpt41Mini = modelRef({
-  name: 'azure-openai/gpt-4.1-mini',
+  name: 'gpt-4.1-mini',
   info: {
     versions: ['gpt-4.1-mini'],
     label: 'OpenAI - GPT-4.1 Mini',
@@ -173,7 +173,7 @@ export const gpt41Mini = modelRef({
 });
 
 export const gpt41Nano = modelRef({
-  name: 'azure-openai/gpt-4.1-nano',
+  name: 'gpt-4.1-nano',
   info: {
     versions: ['gpt-4.1-nano'],
     label: 'OpenAI - GPT-4.1 Nano',
@@ -189,7 +189,7 @@ export const gpt41Nano = modelRef({
 });
 
 export const o1 = modelRef({
-  name: 'azure-openai/o1',
+  name: 'o1',
   info: {
     versions: ['o1'],
     label: 'OpenAI - o1',
@@ -205,7 +205,7 @@ export const o1 = modelRef({
 });
 
 export const o1Mini = modelRef({
-  name: 'azure-openai/o1-mini',
+  name: 'o1-mini',
   info: {
     versions: ['o1-mini'],
     label: 'OpenAI - o1 Mini',
@@ -221,7 +221,7 @@ export const o1Mini = modelRef({
 });
 
 export const o1Preview = modelRef({
-  name: 'azure-openai/o1-preview',
+  name: 'o1-preview',
   info: {
     versions: ['o1-preview'],
     label: 'OpenAI - o1 Preview',
@@ -237,7 +237,7 @@ export const o1Preview = modelRef({
 });
 
 export const o3 = modelRef({
-  name: 'azure-openai/o3',
+  name: 'o3',
   info: {
     versions: ['o3'],
     label: 'OpenAI - o3',
@@ -253,7 +253,7 @@ export const o3 = modelRef({
 });
 
 export const o4Mini = modelRef({
-  name: 'azure-openai/o4-mini',
+  name: 'o4-mini',
   info: {
     versions: ['o4-mini'],
     label: 'OpenAI - o4 Mini',
@@ -269,7 +269,7 @@ export const o4Mini = modelRef({
 });
 
 export const o3Mini = modelRef({
-  name: 'azure-openai/o3-mini',
+  name: 'o3-mini',
   info: {
     versions: ['o3-mini'],
     label: 'OpenAI - o3 Mini',
@@ -285,7 +285,7 @@ export const o3Mini = modelRef({
 });
 
 export const gpt35Turbo = modelRef({
-  name: 'azure-openai/gpt-3.5-turbo',
+  name: 'gpt-3.5-turbo',
   info: {
     versions: ['gpt-3.5-turbo', 'gpt-35-turbo-instruct', 'gpt-35-turbo-16k'],
     label: 'OpenAI - GPT-3.5 Turbo',
@@ -627,7 +627,7 @@ export function toOpenAiRequestBody(
  *
  */
 export function gptModel(name: string, client: AzureOpenAI) {
-  const modelId = `azure-openai/${name}`;
+  const modelId = `${name}`;
   const modelRef = SUPPORTED_GPT_MODELS[name];
   if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 

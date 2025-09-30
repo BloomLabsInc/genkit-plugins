@@ -33,7 +33,7 @@ export const TTSConfigSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const tts1 = modelRef({
-  name: 'azure-openai/tts-1',
+  name: 'tts-1',
   info: {
     label: 'OpenAI - Text-to-speech 1',
     supports: {
@@ -48,7 +48,7 @@ export const tts1 = modelRef({
 });
 
 export const tts1Hd = modelRef({
-  name: 'azure-openai/tts-1-hd',
+  name: 'tts-1-hd',
   info: {
     label: 'OpenAI - Text-to-speech 1 HD',
     supports: {
@@ -126,7 +126,7 @@ export function ttsModel(
   name: string,
   client: AzureOpenAI
 ): ModelAction<typeof TTSConfigSchema> {
-  const modelId = `azure-openai/${name}`;
+  const modelId = `${name}`;
   const modelRef = SUPPORTED_TTS_MODELS[name];
   if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
