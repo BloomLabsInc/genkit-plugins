@@ -63,7 +63,7 @@ export const CohereConfigSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const commandRPlus = modelRef({
-  name: 'cohere/command-r-plus',
+  name: 'command-r-plus',
   info: {
     versions: ['command-r-plus', 'command-r-plus-04-2024'],
     label: 'Cohere - Command R Plus',
@@ -79,7 +79,7 @@ export const commandRPlus = modelRef({
 });
 
 export const commandR = modelRef({
-  name: 'cohere/command-r',
+  name: 'command-r',
   info: {
     versions: [
       'command-r',
@@ -100,7 +100,7 @@ export const commandR = modelRef({
 });
 
 export const commandA = modelRef({
-  name: 'cohere/command-a',
+  name: 'command-a',
   info: {
     versions: ['command-a-03-2025'],
     label: 'Cohere - Command A',
@@ -116,7 +116,7 @@ export const commandA = modelRef({
 });
 
 export const command = modelRef({
-  name: 'cohere/command',
+  name: 'command',
   info: {
     versions: ['command', 'command-nightly'],
     label: 'Cohere - Command',
@@ -132,7 +132,7 @@ export const command = modelRef({
 });
 
 export const commandLight = modelRef({
-  name: 'cohere/command-light',
+  name: 'command-light',
   info: {
     versions: ['command-light', 'command-light-nightly'],
     label: 'Cohere - Command Light',
@@ -458,7 +458,7 @@ export function commandModel(
   name: string,
   client: CohereClient
 ): ModelAction<typeof CohereConfigSchema> {
-  const modelId = `cohere/${name}`;
+  const modelId = `${name}`;
   const modelRef = SUPPORTED_COMMAND_MODELS[name];
   if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
