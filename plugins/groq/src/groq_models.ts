@@ -581,7 +581,7 @@ export function toGroqRequestBody(
 export function createGroqModel(name: string, client: Groq) {
   const modelRef = SUPPORTED_GROQ_MODELS[name];
   if (!modelRef) throw new Error(`Unsupported model: ${name}`);
-  const modelId = `groq/${name}`;
+  const modelId = `${name}`;
 
   return model(
     {
