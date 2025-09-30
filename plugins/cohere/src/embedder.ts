@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import type { Genkit } from 'genkit';
 import { z } from 'genkit';
 import { embedderRef as createEmbedderRef } from 'genkit/embedder';
 import { CohereClient } from 'cohere-ai';

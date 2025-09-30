@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import type { GenerateResponseData } from 'genkit';
 import { Message, GenerationCommonConfigSchema, z } from 'genkit';
 import type {
   GenerateRequest,

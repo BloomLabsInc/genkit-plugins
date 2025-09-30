@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-import type { Genkit } from 'genkit';
 import { genkitPluginV2, ResolvableAction } from 'genkit/plugin';
 import { CohereClient } from 'cohere-ai';
 
 import {
   cohereEmbedder,
   SUPPORTED_EMBEDDING_MODELS,
-  embedMultilingual4,
 } from './embedder';
 import { commandModel, SUPPORTED_COMMAND_MODELS } from './command';
 
