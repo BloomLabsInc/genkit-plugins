@@ -93,7 +93,7 @@ export const anthropic = (options?: PluginOptions) => {
 
   const cachedActions: ModelAction[] = [];
 
-  genkitPluginV2({
+  return genkitPluginV2({
     name: 'anthropic',
     init: async () => {
 

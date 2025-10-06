@@ -72,6 +72,7 @@ export const AnthropicConfigSchema = GenerationCommonConfigSchema.extend({
 
 export const claude4Sonnet = modelRef({
   name: 'claude-4-sonnet',
+  namespace: 'anthropic',
   info: {
     versions: ['claude-sonnet-4-20250514'],
     label: 'Anthropic - Claude 4 Sonnet',
@@ -89,6 +90,7 @@ export const claude4Sonnet = modelRef({
 
 export const claude37Sonnet = modelRef({
   name: 'claude-3-7-sonnet',
+  namespace: 'anthropic',
   info: {
     versions: ['claude-3-7-sonnet-20250219', 'claude-3-7-sonnet-latest'],
     label: 'Anthropic - Claude 3.7 Sonnet',
@@ -106,6 +108,7 @@ export const claude37Sonnet = modelRef({
 
 export const claude35Sonnet = modelRef({
   name: 'claude-3-5-sonnet',
+  namespace: 'anthropic',
   info: {
     versions: [
       'claude-3-5-sonnet-20240620',
@@ -127,6 +130,7 @@ export const claude35Sonnet = modelRef({
 
 export const claude3Opus = modelRef({
   name: 'claude-3-opus',
+  namespace: 'anthropic',
   info: {
     versions: ['claude-3-opus-20240229'],
     label: 'Anthropic - Claude 3 Opus',
@@ -144,6 +148,7 @@ export const claude3Opus = modelRef({
 
 export const claude3Sonnet = modelRef({
   name: 'claude-3-sonnet',
+  namespace: 'anthropic',
   info: {
     versions: ['claude-3-sonnet-20240229'],
     label: 'Anthropic - Claude 3 Sonnet',
@@ -161,6 +166,7 @@ export const claude3Sonnet = modelRef({
 
 export const claude3Haiku = modelRef({
   name: 'claude-3-haiku',
+  namespace: 'anthropic',
   info: {
     versions: ['claude-3-haiku-20240307'],
     label: 'Anthropic - Claude 3 Haiku',
@@ -178,6 +184,7 @@ export const claude3Haiku = modelRef({
 
 export const claude4Opus = modelRef({
   name: 'claude-4-opus',
+  namespace: 'anthropic',
   info: {
     versions: ['claude-opus-4-20250514'],
     label: 'Anthropic - Claude 4 Opus',
@@ -195,6 +202,7 @@ export const claude4Opus = modelRef({
 
 export const claude35Haiku = modelRef({
   name: 'claude-3-5-haiku',
+  namespace: 'anthropic',
   info: {
     versions: ['claude-3-5-haiku-20241022', 'claude-3-5-haiku-latest'],
     label: 'Anthropic - Claude 3.5 Haiku',
