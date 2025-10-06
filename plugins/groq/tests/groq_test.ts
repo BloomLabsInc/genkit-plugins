@@ -113,11 +113,9 @@ describe('Groq Plugin', () => {
     const plugin = groq({ apiKey: 'test-key' });
     const models = await plugin.list?.();
 
-    // Check that we get a list of models
     assert(Array.isArray(models));
     assert(models.length > 0);
 
-    // Check that each model has the expected structure
     for (const model of models) {
       assert.strictEqual((model as any).type, 'model');
       assert(typeof model.name === 'string');
@@ -130,11 +128,9 @@ describe('Groq Plugin', () => {
     const plugin = groq({ apiKey: 'test-key' });
     const models = await plugin.init?.();
 
-    // Check that we get an array of model actions
     assert(Array.isArray(models));
     assert(models.length > 0);
 
-    // Check that each model is a function (action)
     for (const model of models) {
       assert(typeof model === 'function');
     }
