@@ -120,7 +120,8 @@ export const groq = (options?: PluginOptions) =>
     },
     list: async () => {
       return Object.keys(SUPPORTED_GROQ_MODELS).map((name) => ({
-        name: `groq/${name}`,
+        name,
+        namespace: 'groq',
         type: 'model' as const,
         info: SUPPORTED_GROQ_MODELS[name].info,
       }));
