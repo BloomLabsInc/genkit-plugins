@@ -55,6 +55,11 @@ import {
   toAnthropicToolResponseContent,
 } from './claude';
 
+jest.mock('genkit/plugin', () => ({
+  ...(jest.requireActual('genkit/plugin') as object),
+  model: jest.fn(() => ({})),
+}));
+
 describe('toAnthropicRole', () => {
   const testCases: {
     genkitRole: Role;
@@ -996,25 +1001,17 @@ describe('claudeRunner', () => {
 });
 
 describe('claudeModel', () => {
-  let ai: Genkit;
-
-  beforeEach(() => {
-    ai = {
-      defineModel: jest.fn(),
-    } as unknown as Genkit;
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('should correctly define supported Claude models', () => {
-    jest.spyOn(ai, 'defineModel').mockImplementation((() => ({})) as any);
-    claudeModel('claude-3-5-haiku', {} as Anthropic);
-    expect(ai.defineModel).toHaveBeenCalledWith(
+    const { model } = jest.requireMock('genkit/plugin') as { model: jest.Mock };
+    const modelName = 'claude-3-5-haiku';
+    claudeModel(modelName, {} as Anthropic);
+    expect(model).toHaveBeenCalledWith(
       {
-        apiVersion: 'v2',
-        name: claude35Haiku.name,
+        name: modelName,
         ...claude35Haiku.info,
         configSchema: claude35Haiku.configSchema,
       },
