@@ -119,7 +119,7 @@ describe('Groq Plugin', () => {
     for (const model of models) {
       assert.strictEqual((model as any).type, 'model');
       assert(typeof model.name === 'string');
-      assert(model.name.startsWith('groq/'));
+      assert.strictEqual((model as any).namespace, 'groq');
       assert(typeof (model as any).info === 'object');
     }
   });
