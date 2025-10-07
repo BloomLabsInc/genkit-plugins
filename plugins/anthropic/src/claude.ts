@@ -630,7 +630,7 @@ export function claudeModel(
 
   return model(
     {
-      name: `anthropic/${modelId}`,
+      name: `${modelId}`,
       ...modelRef.info,
       configSchema: modelRef.configSchema,
     },
