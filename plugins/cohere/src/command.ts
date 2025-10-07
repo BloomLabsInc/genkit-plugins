@@ -462,13 +462,13 @@ export function commandModel(
   name: string,
   client: CohereClient
 ): ModelAction<typeof CohereConfigSchema> {
-  const modelId = `${name}`;
   const modelRef = SUPPORTED_COMMAND_MODELS[name];
+  const modelId = modelRef.namespace + '/' + `${name}`;
   if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
   return model(
     {
-      name: modelRef.namespace + '/' + modelId,
+      name: modelId,
       ...modelRef.info,
       configSchema: SUPPORTED_COMMAND_MODELS[name].configSchema,
     },
