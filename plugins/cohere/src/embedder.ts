@@ -53,6 +53,7 @@ export const TextEmbeddingInputSchema = z.string();
 
 export const embedMultilingual4 = createEmbedderRef({
   name: 'embed-v4.0',
+  namespace: 'cohere',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 1024,
@@ -65,6 +66,7 @@ export const embedMultilingual4 = createEmbedderRef({
 
 export const embedEnglish3 = createEmbedderRef({
   name: 'embed-english-v3.0',
+  namespace: 'cohere',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 1024,
@@ -77,6 +79,7 @@ export const embedEnglish3 = createEmbedderRef({
 
 export const embedMultilingual3 = createEmbedderRef({
   name: 'embed-multilingual-v3.0',
+  namespace: 'cohere',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 1024,
@@ -89,6 +92,7 @@ export const embedMultilingual3 = createEmbedderRef({
 
 export const embedEnglishLight3 = createEmbedderRef({
   name: 'embed-english-light-v3.0',
+  namespace: 'cohere',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 384,
@@ -101,6 +105,7 @@ export const embedEnglishLight3 = createEmbedderRef({
 
 export const embedMultilingualLight3 = createEmbedderRef({
   name: 'embed-multilingual-light-v3.0',
+  namespace: 'cohere',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 384,

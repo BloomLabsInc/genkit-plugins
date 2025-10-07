@@ -63,6 +63,7 @@ export const CohereConfigSchema = GenerationCommonConfigSchema.extend({
 
 export const commandRPlus = modelRef({
   name: 'command-r-plus',
+  namespace: 'cohere',
   info: {
     versions: ['command-r-plus', 'command-r-plus-04-2024'],
     label: 'Cohere - Command R Plus',
@@ -79,6 +80,7 @@ export const commandRPlus = modelRef({
 
 export const commandR = modelRef({
   name: 'command-r',
+  namespace: 'cohere',
   info: {
     versions: [
       'command-r',
@@ -100,6 +102,7 @@ export const commandR = modelRef({
 
 export const commandA = modelRef({
   name: 'command-a',
+  namespace: 'cohere',
   info: {
     versions: ['command-a-03-2025'],
     label: 'Cohere - Command A',
@@ -116,6 +119,7 @@ export const commandA = modelRef({
 
 export const command = modelRef({
   name: 'command',
+  namespace: 'cohere',
   info: {
     versions: ['command', 'command-nightly'],
     label: 'Cohere - Command',
@@ -132,6 +136,7 @@ export const command = modelRef({
 
 export const commandLight = modelRef({
   name: 'command-light',
+  namespace: 'cohere',
   info: {
     versions: ['command-light', 'command-light-nightly'],
     label: 'Cohere - Command Light',
@@ -463,7 +468,7 @@ export function commandModel(
 
   return model(
     {
-      name: modelId,
+      name: modelRef.namespace + '/' + modelId,
       ...modelRef.info,
       configSchema: SUPPORTED_COMMAND_MODELS[name].configSchema,
     },
