@@ -6,7 +6,7 @@
   "scripts": {
     "check": "tsc",
     "compile": "tsup-node",
-    "build:clean": "rm -rf ./lib",
+    "build:clean": "rimraf ./lib",
     "build": "npm-run-all build:clean check compile",
     "build:watch": "tsup-node --watch",
     "test": "tsx --test ./tests/*_test.ts"
@@ -37,7 +37,8 @@
   "devDependencies": {
     "tsup": "^8.0.2",
     "tsx": "^4.7.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "rimraf": "^6.0.1"
   },
   "types": "./lib/index.d.ts",
   "exports": {

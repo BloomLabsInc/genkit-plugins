@@ -12,7 +12,7 @@
     "start:dev": "npm --prefix ../ run build && node lib/index.js",
     "compile": "npx tsc",
     "build": "npm run build:clean && npm run compile",
-    "build:clean": "rm -rf ./lib",
+    "build:clean": "rimraf ./lib",
     "build:watch": "npx tsc --watch",
     "genkit:dev": "cross-env GENKIT_ENV=dev npm run dev",
     "dev": "export GENKIT_RUNTIME_ID=$(openssl rand -hex 8) && node lib/index.js 2>&1"
@@ -34,6 +34,7 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "rimraf": "^6.0.1"
   }
 }
