@@ -108,8 +108,12 @@ export const anthropic = (options?: PluginOptions) => {
     },
     resolve: (actionType: ActionType, name: string) => {
       if (actionType === 'model') {
-        return cachedActions.find((action) => action.name === name);
+        return claudeModel(
+          name,
+          client
+        );
       }
+      return undefined;
     },
     list: () => {
       return cachedActions.map((action) => ({
