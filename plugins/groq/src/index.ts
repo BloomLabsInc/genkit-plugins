@@ -118,6 +118,11 @@ export const groq = (options?: PluginOptions) =>
 
       return models;
     },
+    // TODO: remove ts-ignore when properly implementing
+    //@ts-ignore
+    resolve: async () => {
+      // TODO: if actionType is "model", then we return createGroqModel(...) of the model
+    },
     list: async () => {
       return Object.keys(SUPPORTED_GROQ_MODELS).map((name) => ({
         name,
