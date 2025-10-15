@@ -15,6 +15,7 @@
  */
 import { genkit, Genkit, z } from 'genkit';
 import { groq, PluginOptions } from '../src/index';
+import { llamaGuard3x8b } from '../src/groq_models';
 import { type ChatCompletion } from 'groq-sdk/resources/chat/index.mjs';
 
 const mockCreate = jest.fn();
@@ -86,26 +87,75 @@ describe('with a genkit instance', () => {
     expect(result.text).toBe(AI_MESSAGE);
   });
 
-  it('should handle basic chat request when passing in modelRef e.g llamaGuard3x8b', () => {
-    // TODO: mocks might need changing up for this test
-    // mockCreate.mockResolvedValue(createMockChatCompletion(AI_MESSAGE));
-    // TODO: import llamaGuard3x8b model reference and use in test
-    // const result = await ai.generate({
-    //   model: llamaGuard3x8b,
-    //   prompt: USER_PROMPT,
-    // });
-    // expect(mockCreate).toHaveBeenCalledTimes(1);
-    // expect(mockCreate).toHaveBeenCalledWith({
-    //   messages: [{ role: 'user', content: USER_PROMPT }],
-    //   model: MODEL_NAME,
-    //   response_format: { type: 'text' },
-    // });
-    // expect(result.text).toBe(AI_MESSAGE);
+  it('should handle basic chat request when passing in modelRef e.g llamaGuard3x8b', async () => {
+    mockCreate.mockResolvedValue(createMockChatCompletion(AI_MESSAGE));
+    const result = await ai.generate({
+      model: llamaGuard3x8b,
+      prompt: USER_PROMPT,
+    });
+    expect(mockCreate).toHaveBeenCalledTimes(1);
+    expect(mockCreate).toHaveBeenCalledWith({
+      messages: [{ role: 'user', content: USER_PROMPT }],
+      model: MODEL_NAME,
+      response_format: { type: 'text' },
+    });
+    expect(result.text).toBe(AI_MESSAGE);
   });
 });
 
 describe('calling the standalone plugin', () => {
-  it('should be able to call groq().model("some model name")', () => {
-    // TODO: look at the migration doc for a reference for how this should work
+  const groqPlugin = groq({ apiKey: 'test-api-key' });
+
+  it('should be able to initialize groq plugin', async () => {
+    const actions = await groqPlugin.init?.();
+
+    expect(actions).toBeDefined();
+    expect(Array.isArray(actions)).toBe(true);
+    expect(actions?.length).toBeGreaterThan(0);
+
+    const llamaGuardModel = actions?.find(
+      (action) =>
+        typeof action === 'function' &&
+        (action as any).__action?.name === 'llama-guard-3-8b'
+    );
+
+    expect(llamaGuardModel).toBeDefined();
+    expect(typeof llamaGuardModel).toBe('function');
+  });
+
+  it('should create actions with proper structure', async () => {
+    const actions = await groqPlugin.init?.();
+
+    expect(actions).toBeDefined();
+    expect(Array.isArray(actions)).toBe(true);
+    expect(actions?.length).toBeGreaterThan(0);
+
+    if (actions) {
+      for (const action of actions) {
+        expect(typeof action).toBe('function');
+        expect((action as any).__action).toBeDefined();
+        expect((action as any).__action.name).toBeDefined();
+        expect(typeof (action as any).__action.name).toBe('string');
+      }
+    }
+  });
+
+  it('should list available models', async () => {
+    const availableActions = await groqPlugin.list?.();
+
+    expect(availableActions).toBeDefined();
+    expect(Array.isArray(availableActions)).toBe(true);
+    expect(availableActions?.length).toBeGreaterThan(0);
+
+    const modelActions = availableActions?.filter(
+      (action) => (action as any).type === 'model'
+    );
+    expect(modelActions?.length).toBeGreaterThan(0);
+
+    const llamaGuardAction = modelActions?.find(
+      (action) => action.name === 'llama-guard-3-8b'
+    );
+    expect(llamaGuardAction).toBeDefined();
+    expect((llamaGuardAction as any)?.namespace).toBe('groq');
   });
 });
