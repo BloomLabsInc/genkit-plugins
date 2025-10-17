@@ -91,26 +91,24 @@ export interface PluginOptions {
  * @param options - Optional configuration settings for the plugin.
  * @returns An object containing the models initialized with the Groq client.
  */
-export const groq = (options?: PluginOptions) =>
-  genkitPluginV2({
+export const groq = (options?: PluginOptions) => {
+  const apiKey = options?.apiKey || process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new Error(
+      'Please provide the API key or set the GROQ_API_KEY environment variable'
+    );
+  }
+
+  const client = new Groq({
+    baseURL: options?.baseURL || process.env.GROQ_BASE_URL,
+    apiKey,
+    timeout: options?.timeout,
+    maxRetries: options?.maxRetries,
+  });
+
+  return genkitPluginV2({
     name: 'groq',
     init: async () => {
-      const apiKey = options?.apiKey || process.env.GROQ_API_KEY;
-      if (!apiKey) {
-        throw new Error(
-          'Please provide the API key or set the GROQ_API_KEY environment variable'
-        );
-      }
-
-      // Initialize Groq client
-      const client = new Groq({
-        baseURL: options?.baseURL || process.env.GROQ_BASE_URL, // Optional base URL with environment variable fallback
-        apiKey, // API key retrieved from options or environment
-        timeout: options?.timeout, // Optional timeout
-        maxRetries: options?.maxRetries, // Optional max retries
-      });
-
-      // Create model actions for each supported model
       const models: any[] = [];
       for (const name of Object.keys(SUPPORTED_GROQ_MODELS)) {
         models.push(createGroqModel(name, client));
@@ -118,10 +116,13 @@ export const groq = (options?: PluginOptions) =>
 
       return models;
     },
-    // TODO: remove ts-ignore when properly implementing
-    //@ts-ignore
-    resolve: async () => {
-      // TODO: if actionType is "model", then we return createGroqModel(...) of the model
+    resolve: async (actionType, actionName) => {
+      console.log('resolve', actionType, actionName);
+
+      if (actionType === 'model') {
+        return createGroqModel(actionName, client);
+      }
+      return undefined;
     },
     list: async () => {
       return Object.keys(SUPPORTED_GROQ_MODELS).map((name) => ({
@@ -132,6 +133,6 @@ export const groq = (options?: PluginOptions) =>
       }));
     },
   });
+};
 
-// Default export for plugin usage
 export default groq;

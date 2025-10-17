@@ -17,6 +17,7 @@ import { genkit, Genkit, z } from 'genkit';
 import { groq, PluginOptions } from '../src/index';
 import { llamaGuard3x8b } from '../src/groq_models';
 import { type ChatCompletion } from 'groq-sdk/resources/chat/index.mjs';
+import { ResolvableAction } from 'genkit/plugin';
 
 const mockCreate = jest.fn();
 
@@ -106,6 +107,30 @@ describe('with a genkit instance', () => {
 describe('calling the standalone plugin', () => {
   const groqPlugin = groq({ apiKey: 'test-api-key' });
 
+  const createMockChatCompletion = (content: string): ChatCompletion => ({
+    id: 'chatcmpl-test-123',
+    object: 'chat.completion',
+    created: 1234567890,
+    model: 'llama-3-8b',
+    choices: [
+      {
+        index: 0,
+        message: {
+          role: 'assistant',
+          content,
+        },
+        finish_reason: 'stop',
+        logprobs: null,
+      },
+    ],
+    usage: {
+      prompt_tokens: 10,
+      completion_tokens: 5,
+      total_tokens: 15,
+    },
+    system_fingerprint: 'mock-fingerprint',
+  });
+
   it('should be able to initialize groq plugin', async () => {
     const actions = await groqPlugin.init?.();
 
@@ -157,5 +182,95 @@ describe('calling the standalone plugin', () => {
     );
     expect(llamaGuardAction).toBeDefined();
     expect((llamaGuardAction as any)?.namespace).toBe('groq');
+  });
+
+  it('should resolve models dynamically for direct usage', async () => {
+    const resolvedModel = await groqPlugin.resolve?.(
+      'model',
+      'llama-guard-3-8b'
+    );
+
+    expect(typeof resolvedModel).toBe('function');
+    expect((resolvedModel as any).__action).toBeDefined();
+    expect((resolvedModel as any).__action.name).toBe('llama-guard-3-8b');
+
+    // Mock the API response for direct model usage
+    mockCreate.mockResolvedValue({
+      id: 'chatcmpl-test-123',
+      object: 'chat.completion',
+      created: 1234567890,
+      model: 'llama-guard-3-8b',
+      choices: [
+        {
+          index: 0,
+          message: {
+            role: 'assistant',
+            content: 'Hello from resolved model!',
+          },
+          finish_reason: 'stop',
+          logprobs: null,
+        },
+      ],
+      usage: {
+        prompt_tokens: 10,
+        completion_tokens: 5,
+        total_tokens: 15,
+      },
+      system_fingerprint: 'mock-fingerprint',
+    });
+
+    const response = await (resolvedModel as Function)({
+      messages: [
+        {
+          role: 'user',
+          content: [{ text: 'hi' }],
+        },
+      ],
+    });
+
+    expect(mockCreate).toHaveBeenCalledTimes(1);
+    expect(response.candidates[0].message.content[0].text).toBe(
+      'Hello from resolved model!'
+    );
+  });
+
+  it('should handle resolve with unsupported action types', async () => {
+    const embedderResult = await groqPlugin.resolve?.(
+      'embedder',
+      'some-embedder'
+    );
+    const toolResult = await groqPlugin.resolve?.('tool', 'some-tool');
+
+    expect(embedderResult).toBeUndefined();
+    expect(toolResult).toBeUndefined();
+  });
+
+  it('should create model action', async () => {
+    const actions = await groqPlugin.init?.();
+
+    expect(actions).toBeDefined();
+    expect(actions?.length).toBeGreaterThan(0);
+    expect(actions?.[0].__action.name).toBe('llama-3-8b');
+  });
+
+  it('should generate response', async () => {
+    const actions = await groqPlugin.init?.();
+
+    const model = actions?.[0];
+    expect(model).toBeDefined();
+
+    mockCreate.mockResolvedValue(createMockChatCompletion('Hello!'));
+
+    const response = await (model as Function)({
+      messages: [
+        {
+          role: 'user',
+          content: [{ text: 'Hi there!' }],
+        },
+      ],
+    });
+
+    expect(mockCreate).toHaveBeenCalledTimes(1);
+    expect(response.candidates[0].message.content[0].text).toBe('Hello!');
   });
 });
