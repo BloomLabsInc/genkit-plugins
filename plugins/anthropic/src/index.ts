@@ -54,21 +54,19 @@ async function list(client: Anthropic): Promise<ActionMetadata[]> {
 
   return clientModels
     .map((modelInfo) => {
-      // Remove the final part if it's a date (8 digits)
-      const idParts = modelInfo.id.split('-');
-      const normalizedId = idParts[idParts.length - 1].match(/^\d{8}$/)
-        ? idParts.slice(0, -1).join('-')
-        : modelInfo.id;
+      // Remove the date suffix from the model id
+      const normalizedId = modelInfo.id.replace(/-\d{8}$/, '');
+      // Get the model reference from the supported models
       const ref = SUPPORTED_CLAUDE_MODELS[normalizedId];
-      return ref
-        ? modelActionMetadata({
-            name: ref.name,
-            info: ref.info,
-            configSchema: ref.configSchema,
-          })
-        : null;
+      // Return the model action metadata if the model is supported
+      return ref ? modelActionMetadata({
+        name: ref.name,
+        info: ref.info,
+        configSchema: ref.configSchema,
+      }) : undefined;
     })
-    .filter(Boolean) as ActionMetadata[];
+    // Filter out undefined values
+    .filter((metadata) => metadata !== undefined);
 }
 
 /**
@@ -115,7 +113,7 @@ export const anthropic = (options?: PluginOptions) => {
   const client = new Anthropic({ apiKey, defaultHeaders });
 
   const cachedActions: ModelAction[] = [];
-  let listActionsCache;
+  let listActionsCache: ActionMetadata[] | null = null;
 
   return genkitPluginV2({
     name: 'anthropic',
