@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { genkitPluginV2 } from 'genkit/plugin';
+import { genkitPluginV2, model, modelActionMetadata } from 'genkit/plugin';
 import Anthropic from '@anthropic-ai/sdk';
 
 import {
@@ -31,6 +31,7 @@ import {
 } from './claude.js';
 import { ModelAction } from 'genkit/model';
 import { ActionType } from 'genkit/registry';
+import { ActionMetadata } from 'genkit';
 
 export {
   claude4Sonnet,
@@ -46,6 +47,28 @@ export {
 export interface PluginOptions {
   apiKey?: string;
   cacheSystemPrompt?: boolean;
+}
+
+async function list(client: Anthropic): Promise<ActionMetadata[]> {
+  const clientModels = (await client.models.list()).data;
+
+  return clientModels
+    .map((modelInfo) => {
+      // Remove the final part if it's a date (8 digits)
+      const idParts = modelInfo.id.split('-');
+      const normalizedId = idParts[idParts.length - 1].match(/^\d{8}$/)
+        ? idParts.slice(0, -1).join('-')
+        : modelInfo.id;
+      const ref = SUPPORTED_CLAUDE_MODELS[normalizedId];
+      return ref
+        ? modelActionMetadata({
+            name: ref.name,
+            info: ref.info,
+            configSchema: ref.configSchema,
+          })
+        : null;
+    })
+    .filter(Boolean) as ActionMetadata[];
 }
 
 /**
@@ -92,6 +115,7 @@ export const anthropic = (options?: PluginOptions) => {
   const client = new Anthropic({ apiKey, defaultHeaders });
 
   const cachedActions: ModelAction[] = [];
+  let listActionsCache;
 
   return genkitPluginV2({
     name: 'anthropic',
@@ -115,12 +139,11 @@ export const anthropic = (options?: PluginOptions) => {
       }
       return undefined;
     },
-    list: () => {
-      return cachedActions.map((action) => ({
-        name: action.name,
-        type: 'model',
-      }));
-    },
+    list: async () => {
+      if (listActionsCache) return listActionsCache;
+      listActionsCache = await list(client);
+      return listActionsCache;
+    }
   });
 };
 
