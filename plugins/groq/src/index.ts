@@ -109,10 +109,9 @@ export const groq = (options?: PluginOptions) => {
   return genkitPluginV2({
     name: 'groq',
     init: async () => {
-      const models: any[] = [];
-      for (const name of Object.keys(SUPPORTED_GROQ_MODELS)) {
-        models.push(createGroqModel(name, client));
-      }
+      const models = Object.keys(SUPPORTED_GROQ_MODELS).map((name) =>
+        createGroqModel(name, client)
+      );
 
       return models;
     },
