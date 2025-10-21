@@ -83,7 +83,6 @@ describe('toGroqRequestBody', () => {
     };
 
     const actualOutput = toGroqRequestBody('llama-3-8b', request);
-    // console.log(`actualOutput.stop: ${actualOutput.stop}`);
     expect(
       JSON.parse(JSON.stringify(actualOutput)) // Remove undefined fields
     ).toEqual(JSON.parse(JSON.stringify(expectedOutput)));

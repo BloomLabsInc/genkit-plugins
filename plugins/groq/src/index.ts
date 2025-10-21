@@ -117,8 +117,6 @@ export const groq = (options?: PluginOptions) => {
       return models;
     },
     resolve: async (actionType, actionName) => {
-      console.log('resolve', actionType, actionName);
-
       if (actionType === 'model') {
         return createGroqModel(actionName, client);
       }
