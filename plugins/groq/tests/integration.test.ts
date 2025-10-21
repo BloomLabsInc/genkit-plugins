@@ -107,6 +107,10 @@ describe('with a genkit instance', () => {
 describe('calling the standalone plugin', () => {
   const groqPlugin = groq({ apiKey: 'test-api-key' });
 
+  beforeEach(() => {
+    mockCreate.mockClear();
+  });
+
   const createMockChatCompletion = (content: string): ChatCompletion => ({
     id: 'chatcmpl-test-123',
     object: 'chat.completion',
