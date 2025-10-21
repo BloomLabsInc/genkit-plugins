@@ -25,7 +25,6 @@ import { ChatCompletion } from 'groq-sdk/resources/chat/index.mjs';
 import {
   GenerateRequest,
   GenerationCommonConfigSchema,
-  Genkit,
   Message,
   MessageData,
   Part,
@@ -40,6 +39,7 @@ import {
   modelRef,
   ToolDefinition,
 } from 'genkit/model';
+import { model } from 'genkit/plugin';
 
 export const GroqConfigSchema = GenerationCommonConfigSchema.extend({
   stream: z.boolean().optional(),
@@ -572,29 +572,29 @@ export function toGroqRequestBody(
 }
 
 /**
- * Defines a Groq model.
+ * Creates a Groq model action.
  *
  * @param name - The name of the model.
  * @param client - The Groq client.
- * @returns The model.
+ * @returns The model action.
  */
-export function groqModel(ai: Genkit, name: string, client: Groq) {
-  const model = SUPPORTED_GROQ_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
-  const modelId = `groq/${name}`;
+export function createGroqModel(name: string, client: Groq) {
+  const modelRef = SUPPORTED_GROQ_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
+  const modelId = `${name}`;
 
-  return ai.defineModel(
+  return model(
     {
       name: modelId,
-      ...model.info,
-      configSchema: model.configSchema,
+      ...modelRef.info,
+      configSchema: modelRef.configSchema,
     },
-    async (
-      request,
-      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
-    ) => {
+    async (request, options: any) => {
       let response: ChatCompletion;
       const body = toGroqRequestBody(name, request);
+      const streamingCallback:
+        | StreamingCallback<GenerateResponseChunkData>
+        | undefined = options?.streamingCallback;
       if (streamingCallback) {
         if (request.output?.format === 'json') {
           throw new Error(

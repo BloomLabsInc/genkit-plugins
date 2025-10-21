@@ -1,5 +1,3 @@
-import assert from 'node:assert';
-import { describe, it } from 'node:test';
 import { GenerateRequest, MessageData, Role } from 'genkit';
 import {
   toGroqRequestBody,
@@ -7,28 +5,29 @@ import {
   toGroqMessages,
 } from '../src/groq_models';
 import { ChatCompletionCreateParamsBase } from 'groq-sdk/resources/chat/completions.mjs';
+import { groq } from '../src/index';
 
 describe('toGroqRole', () => {
   it('should convert user role correctly', () => {
-    assert.strictEqual(toGroqRole('user'), 'user');
+    expect(toGroqRole('user')).toBe('user');
   });
 
   it('should convert model role to assistant', () => {
-    assert.strictEqual(toGroqRole('model'), 'assistant');
+    expect(toGroqRole('model')).toBe('assistant');
   });
 
   it('should convert system role correctly', () => {
-    assert.strictEqual(toGroqRole('system'), 'system');
+    expect(toGroqRole('system')).toBe('system');
   });
 
   it('should convert tool role correctly', () => {
-    assert.strictEqual(toGroqRole('tool'), 'assistant');
+    expect(toGroqRole('tool')).toBe('assistant');
   });
 
   it('should throw error for unsupported roles', () => {
-    assert.throws(() => toGroqRole('unknown' as Role), {
-      message: "role unknown doesn't map to a Groq role.",
-    });
+    expect(() => toGroqRole('unknown' as Role)).toThrow(
+      "role unknown doesn't map to a Groq role."
+    );
   });
 });
 
@@ -43,7 +42,7 @@ describe('toGroqMessages', () => {
       { role: 'user', content: 'Hello, world!' },
       { role: 'assistant', content: 'How can I assist you today?' },
     ];
-    assert.deepStrictEqual(toGroqMessages(messages), expectedOutput);
+    expect(toGroqMessages(messages)).toEqual(expectedOutput);
   });
 });
 
@@ -84,16 +83,56 @@ describe('toGroqRequestBody', () => {
     };
 
     const actualOutput = toGroqRequestBody('llama-3-8b', request);
-    console.log(`actualOutput.stop: ${actualOutput.stop}`);
-    assert.deepStrictEqual(
-      JSON.parse(JSON.stringify(actualOutput)), // Remove undefined fields
-      JSON.parse(JSON.stringify(expectedOutput))
-    );
+    expect(
+      JSON.parse(JSON.stringify(actualOutput)) // Remove undefined fields
+    ).toEqual(JSON.parse(JSON.stringify(expectedOutput)));
   });
 
   it('should handle unsupported models', () => {
-    assert.throws(() => toGroqRequestBody('unsupported-model', request), {
-      message: 'Unsupported model: unsupported-model',
-    });
+    expect(() => toGroqRequestBody('unsupported-model', request)).toThrow(
+      'Unsupported model: unsupported-model'
+    );
+  });
+});
+
+describe('Groq Plugin', () => {
+  it('should create plugin with v2 API', () => {
+    const plugin = groq({ apiKey: 'test-key' });
+
+    // Check that the plugin has the expected structure
+    expect(plugin.name).toBe('groq');
+    expect(typeof plugin.init).toBe('function');
+    expect(typeof plugin.list).toBe('function');
+  });
+
+  it('should list available models', async () => {
+    const plugin = groq({ apiKey: 'test-key' });
+    const models = await plugin.list?.();
+
+    expect(Array.isArray(models)).toBe(true);
+    expect(models?.length).toBeGreaterThan(0);
+
+    if (models) {
+      for (const model of models) {
+        expect((model as any).type).toBe('model');
+        expect(typeof model.name).toBe('string');
+        expect((model as any).namespace).toBe('groq');
+        expect(typeof (model as any).info).toBe('object');
+      }
+    }
+  });
+
+  it('should initialize models', async () => {
+    const plugin = groq({ apiKey: 'test-key' });
+    const models = await plugin.init?.();
+
+    expect(Array.isArray(models)).toBe(true);
+    expect(models?.length).toBeGreaterThan(0);
+
+    if (models) {
+      for (const model of models) {
+        expect(typeof model).toBe('function');
+      }
+    }
   });
 });

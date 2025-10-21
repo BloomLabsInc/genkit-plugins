@@ -17,7 +17,7 @@
 // Import necessary types and functions for Groq SDK integration.
 import Groq from 'groq-sdk';
 import {
-  groqModel,
+  createGroqModel,
   llama3x70b,
   llama3x8b,
   llamaGuard3x8b,
@@ -32,8 +32,7 @@ import {
   deepseekR1DistillLlamax70b,
   SUPPORTED_GROQ_MODELS,
 } from './groq_models';
-import { Genkit } from 'genkit';
-import { genkitPlugin } from 'genkit/plugin';
+import { genkitPluginV2 } from 'genkit/plugin';
 
 // Export models for direct access
 export {
@@ -92,28 +91,45 @@ export interface PluginOptions {
  * @param options - Optional configuration settings for the plugin.
  * @returns An object containing the models initialized with the Groq client.
  */
-export const groq = (options?: PluginOptions) =>
-  genkitPlugin('groq', async (ai: Genkit) => {
-    const apiKey = options?.apiKey || process.env.GROQ_API_KEY;
-    if (!apiKey) {
-      throw new Error(
-        'Please provide the API key or set the GROQ_API_KEY environment variable'
-      );
-    }
+export const groq = (options?: PluginOptions) => {
+  const apiKey = options?.apiKey || process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new Error(
+      'Please provide the API key or set the GROQ_API_KEY environment variable'
+    );
+  }
 
-    // Initialize Groq client
-    const client = new Groq({
-      baseURL: options?.baseURL || process.env.GROQ_BASE_URL, // Optional base URL with environment variable fallback
-      apiKey, // API key retrieved from options or environment
-      timeout: options?.timeout, // Optional timeout
-      maxRetries: options?.maxRetries, // Optional max retries
-    });
-
-    // Register each model with the Genkit instance
-    for (const name of Object.keys(SUPPORTED_GROQ_MODELS)) {
-      groqModel(ai, name, client);
-    }
+  const client = new Groq({
+    baseURL: options?.baseURL || process.env.GROQ_BASE_URL,
+    apiKey,
+    timeout: options?.timeout,
+    maxRetries: options?.maxRetries,
   });
 
-// Default export for plugin usage
+  return genkitPluginV2({
+    name: 'groq',
+    init: async () => {
+      const models = Object.keys(SUPPORTED_GROQ_MODELS).map((name) =>
+        createGroqModel(name, client)
+      );
+
+      return models;
+    },
+    resolve: async (actionType, actionName) => {
+      if (actionType === 'model') {
+        return createGroqModel(actionName, client);
+      }
+      return undefined;
+    },
+    list: async () => {
+      return Object.keys(SUPPORTED_GROQ_MODELS).map((name) => ({
+        name,
+        namespace: 'groq',
+        type: 'model' as const,
+        info: SUPPORTED_GROQ_MODELS[name].info,
+      }));
+    },
+  });
+};
+
 export default groq;
