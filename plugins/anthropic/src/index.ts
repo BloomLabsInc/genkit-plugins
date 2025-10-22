@@ -112,20 +112,16 @@ export const anthropic = (options?: PluginOptions) => {
   }
   const client = new Anthropic({ apiKey, defaultHeaders });
 
-  const cachedActions: ModelAction[] = [];
   let listActionsCache: ActionMetadata[] | null = null;
 
   return genkitPluginV2({
     name: 'anthropic',
     init: async () => {
-
       const actions: ModelAction[] = [];
       for (const name of Object.keys(SUPPORTED_CLAUDE_MODELS)) {
         const action = claudeModel(name, client, options?.cacheSystemPrompt);
         actions.push(action);
-        cachedActions.push(action);
       }
-
       return actions;
     },
     resolve: (actionType: ActionType, name: string) => {

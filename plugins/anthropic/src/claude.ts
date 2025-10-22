@@ -624,13 +624,12 @@ export function claudeModel(
   client: Anthropic,
   cacheSystemPrompt?: boolean
 ): ModelAction<typeof AnthropicConfigSchema> {
-  const modelId = `${name}`;
   const modelRef = SUPPORTED_CLAUDE_MODELS[name];
   if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
   return model(
     {
-      name: `${modelId}`,
+      name: `anthropic/${name}`,
       ...modelRef.info,
       configSchema: modelRef.configSchema,
     },
