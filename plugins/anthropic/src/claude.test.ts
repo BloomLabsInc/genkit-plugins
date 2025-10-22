@@ -1011,7 +1011,7 @@ describe('claudeModel', () => {
     claudeModel(modelName, {} as Anthropic);
     expect(model).toHaveBeenCalledWith(
       {
-        name: modelName,
+        name: `anthropic/${modelName}`,
         ...claude35Haiku.info,
         configSchema: claude35Haiku.configSchema,
       },
