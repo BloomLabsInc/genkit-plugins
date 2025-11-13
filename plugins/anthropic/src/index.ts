@@ -26,6 +26,7 @@ import {
   claude3Sonnet,
   claude3Haiku,
   claude35Haiku,
+  claude45Sonnet,
   claudeModel,
   SUPPORTED_CLAUDE_MODELS,
 } from './claude.js';
@@ -42,6 +43,7 @@ export {
   claude3Sonnet,
   claude3Haiku,
   claude35Haiku,
+  claude45Sonnet,
 };
 
 export interface PluginOptions {
