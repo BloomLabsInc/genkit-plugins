@@ -48,6 +48,9 @@ import type {
 } from '@anthropic-ai/sdk/resources/messages.mjs';
 import { model } from 'genkit/plugin';
 
+// Whether 'thinking' and 'redacted_thinking' content blocks should be handled and propagated as reasoning in Genkit Parts
+export const ANTHROPIC_THINKING_ENABLED = true;
+
 export const AnthropicConfigSchema = GenerationCommonConfigSchema.extend({
   tool_choice: z
     .union([
@@ -218,6 +221,24 @@ export const claude35Haiku = modelRef({
   version: 'claude-3-5-haiku-latest',
 });
 
+export const claude45Sonnet = modelRef({
+  name: 'claude-4-5-sonnet',
+  namespace: 'anthropic',
+  info: {
+    versions: ['claude-sonnet-4-5-20250929'],
+    label: 'Anthropic - Claude 4.5 Sonnet',
+    supports: {
+      multiturn: true,
+      tools: true,
+      media: true,
+      systemRole: true,
+      output: ['text'],
+    },
+  },
+  configSchema: AnthropicConfigSchema,
+  version: 'claude-sonnet-4-5-20250929',
+});
+
 export const SUPPORTED_CLAUDE_MODELS: Record<
   string,
   ModelReference<typeof AnthropicConfigSchema>
@@ -230,6 +251,7 @@ export const SUPPORTED_CLAUDE_MODELS: Record<
   'claude-3-5-haiku': claude35Haiku,
   'claude-4-sonnet': claude4Sonnet,
   'claude-4-opus': claude4Opus,
+  'claude-4-5-sonnet': claude45Sonnet,
 };
 
 /**
@@ -421,6 +443,7 @@ export function toAnthropicTool(tool: ToolDefinition): Tool {
  *          start or delta, otherwise undefined.
  */
 function fromAnthropicContentBlock(contentBlock: ContentBlock): Part {
+  // 'thinking' block support is gated by ANTHROPIC_THINKING_ENABLED (default: true)
   if (contentBlock.type === 'tool_use') {
     return {
       toolRequest: {
@@ -431,10 +454,16 @@ function fromAnthropicContentBlock(contentBlock: ContentBlock): Part {
     };
   } else if (contentBlock.type === 'text') {
     return { text: contentBlock.text };
-  } else if (contentBlock.type === 'thinking') {
-    return { text: contentBlock.thinking };
-  } else if (contentBlock.type === 'redacted_thinking') {
-    return { text: contentBlock.data };
+  } else if (
+    ANTHROPIC_THINKING_ENABLED &&
+    contentBlock.type === 'thinking'
+  ) {
+    return { reasoning: contentBlock.thinking };
+  } else if (
+    ANTHROPIC_THINKING_ENABLED &&
+    contentBlock.type === 'redacted_thinking'
+  ) {
+    return { reasoning: contentBlock.data };
   } else {
     // Handle other content block types
     return { text: '' };
@@ -455,17 +484,40 @@ export function fromAnthropicContentBlockChunk(
   }
   const eventField =
     event.type === 'content_block_start' ? 'content_block' : 'delta';
-  return ['text', 'text_delta'].includes(event[eventField].type)
-    ? {
-        text: event[eventField].text,
-      }
-    : {
-        toolRequest: {
-          ref: event[eventField].id,
-          name: event[eventField].name,
-          input: event[eventField].input,
-        },
-      };
+
+  const blockType = event[eventField].type;
+
+  if (blockType === 'text' || blockType === 'text_delta') {
+    return {
+      text: event[eventField].text,
+    };
+  }
+
+  // Support for 'thinking' and 'redacted_thinking' blocks if enabled
+  if (ANTHROPIC_THINKING_ENABLED && blockType === 'thinking') {
+    return {
+      reasoning: event[eventField].thinking,
+    };
+  }
+  if (ANTHROPIC_THINKING_ENABLED && blockType === 'redacted_thinking') {
+    return {
+      reasoning: event[eventField].data,
+    };
+  }
+
+  if (blockType === 'tool_use' || blockType === 'tool_use_delta') {
+    // Anthropic API may use a different shape for deltas in streaming. Map as best-effort.
+    return {
+      toolRequest: {
+        ref: event[eventField].id,
+        name: event[eventField].name,
+        input: event[eventField].input,
+      },
+    };
+  }
+
+  // Fallback: ignore unsupported block types
+  return undefined;
 }
 
 export function fromAnthropicStopReason(
