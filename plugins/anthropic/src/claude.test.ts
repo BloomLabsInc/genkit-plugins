@@ -837,6 +837,40 @@ describe('toAnthropicRequestBody', () => {
         },
       },
     },
+    {
+      should: '(claude-4-5-haiku) handles request with text messages',
+      modelName: 'claude-4-5-haiku',
+      genkitRequest: {
+        messages: [
+          { role: 'user', content: [{ text: 'Tell a joke about dogs.' }] },
+        ],
+        output: { format: 'text' },
+        config: {
+          metadata: {
+            user_id: 'exampleUser123',
+          },
+        },
+      },
+      expectedOutput: {
+        max_tokens: 4096,
+        messages: [
+          {
+            content: [
+              {
+                text: 'Tell a joke about dogs.',
+                type: 'text',
+                citations: null,
+              },
+            ],
+            role: 'user',
+          },
+        ],
+        model: 'claude-haiku-4-5-20251001',
+        metadata: {
+          user_id: 'exampleUser123',
+        },
+      },
+    },
   ];
   for (const test of testCases) {
     it(test.should, () => {
