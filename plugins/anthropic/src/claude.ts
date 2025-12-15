@@ -240,7 +240,7 @@ export const claude45Haiku = modelRef({
   name: 'claude-4-5-haiku',
   namespace: 'anthropic',
   info: {
-    versions: ['claude-haiku-4-5-20251001', 'claude-haiku-4-5-latest'],
+    versions: ['claude-haiku-4-5-20251001'],
     label: 'Anthropic - Claude 4.5 Haiku',
     supports: {
       multiturn: true,
@@ -251,7 +251,7 @@ export const claude45Haiku = modelRef({
     },
   },
   configSchema: AnthropicConfigSchema,
-  version: 'claude-haiku-4-5-latest',
+  version: 'claude-haiku-4-5-20251001',
 });
 
 export const SUPPORTED_CLAUDE_MODELS: Record<
