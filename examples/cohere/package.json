@@ -1,6 +1,6 @@
 {
   "name": "genkitx-cohere-example",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "description": "",
   "main": "lib/index.js",
   "private": true,
