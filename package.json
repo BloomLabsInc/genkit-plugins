@@ -11,7 +11,7 @@
     "publish": "lerna publish --no-private -y from-package",
     "test": "lerna run test",
     "format": "prettier --write \"**/*.{js,ts,json,md}\"",
-    "prepare": "husky install "
+    "prepare": "husky install"
   },
   "lint-staged": {
     "**/*.{js,ts,json,md}": "prettier --write"
