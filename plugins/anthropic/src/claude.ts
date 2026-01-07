@@ -254,6 +254,24 @@ export const claude45Haiku = modelRef({
   version: 'claude-haiku-4-5-20251001',
 });
 
+export const claude45Opus = modelRef({
+  name: 'claude-4-5-opus',
+  namespace: 'anthropic',
+  info: {
+    versions: ['claude-opus-4-5-20251101'],
+    label: 'Anthropic - Claude 4.5 Opus',
+    supports: {
+      multiturn: true,
+      tools: true,
+      media: true,
+      systemRole: true,
+      output: ['text'],
+    },
+  },
+  configSchema: AnthropicConfigSchema,
+  version: 'claude-opus-4-5-20251101',
+});
+
 export const SUPPORTED_CLAUDE_MODELS: Record<
   string,
   ModelReference<typeof AnthropicConfigSchema>
@@ -268,6 +286,7 @@ export const SUPPORTED_CLAUDE_MODELS: Record<
   'claude-4-opus': claude4Opus,
   'claude-4-5-sonnet': claude45Sonnet,
   'claude-4-5-haiku': claude45Haiku,
+  'claude-4-5-opus': claude45Opus,
 };
 
 /**

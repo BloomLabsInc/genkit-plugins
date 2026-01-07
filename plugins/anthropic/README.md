@@ -28,7 +28,7 @@ to the [official Vertex AI plugin](https://www.npmjs.com/package/@genkit-ai/vert
 ## Supported models
 
 The plugin supports the most recent Anthropic models:
-**Claude 3.7 Sonnet**, **Claude 3.5 Sonnet**, **Claude 3 Opus**, **Claude 3 Sonnet**, and **Claude 3 Haiku**.
+**Claude 4.5 Opus**, **Claude 4.5 Sonnet**, **Claude 4.5 Haiku**, **Claude 4 Opus**, **Claude 4 Sonnet**, **Claude 3.7 Sonnet**, **Claude 3.5 Sonnet**, **Claude 3.5 Haiku**, **Claude 3 Opus**, **Claude 3 Sonnet**, and **Claude 3 Haiku**.
 
 ## Installation
 
