@@ -21,6 +21,11 @@ title: genkitx-anthropic
    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/BloomLabsInc/genkit-plugins"/>
 </div>
 
+> [!WARNING]  
+> **This plugin has been merged into the core Genkit distribution.** Please use the official Anthropic plugins instead:
+>
+> - **Anthropic Plugin**: `@genkit-ai/anthropic`
+
 `genkitx-anthropic` is a community plugin for using Anthropic AI and all its supported models with [Firebase Genkit](https://github.com/firebase/genkit).
 
 This Genkit plugin allows to use Anthropic AI models through their official APIs.
