@@ -22,6 +22,9 @@
     "url": "git+https://github.com/BloomLabsInc/genkit-plugins.git",
     "directory": "plugins/openai"
   },
+  "bugs": {
+    "url": "https://github.com/BloomLabsInc/genkit-plugins/issues"
+  },
   "author": "BloomLabsInc",
   "license": "Apache-2.0",
   "dependencies": {
