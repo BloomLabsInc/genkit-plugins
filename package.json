@@ -31,5 +31,8 @@
   },
   "optionalDependencies": {
     "@nx/nx-linux-x64-gnu": "20.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/BloomLabsInc/genkit-plugins/issues"
   }
 }
