@@ -30,6 +30,11 @@ import {
   qwenqwqx32b,
   allam2x7b,
   deepseekR1DistillLlamax70b,
+  gptOssx20b,
+  gptOssx120b,
+  gptOssSafeguardx20b,
+  qwen36x27b,
+  qwen3x32b,
   SUPPORTED_GROQ_MODELS,
 } from './groq_models';
 import { Genkit } from 'genkit';
@@ -49,6 +54,11 @@ export {
   qwenqwqx32b,
   allam2x7b,
   deepseekR1DistillLlamax70b,
+  gptOssx20b,
+  gptOssx120b,
+  gptOssSafeguardx20b,
+  qwen36x27b,
+  qwen3x32b,
 };
 
 // Define the PluginOptions interface for customization of the Groq plugin.
