@@ -265,6 +265,91 @@ export const deepseekR1DistillLlamax70b = modelRef({
   version: 'deepseek-r1-distill-llama-70b',
 });
 
+export const gptOssx20b = modelRef({
+  name: 'groq/openai/gpt-oss-20b',
+  info: {
+    versions: ['openai/gpt-oss-20b'],
+    label: 'GPT OSS 20B',
+    supports: {
+      multiturn: true,
+      tools: true, // Could be true but not recommended
+      media: false,
+      systemRole: true,
+      output: ['text', 'json'],
+    },
+  },
+  configSchema: GroqConfigSchema,
+  version: 'openai/gpt-oss-20b',
+});
+
+export const gptOssSafeguardx20b = modelRef({
+  name: 'groq/openai/gpt-oss-safeguard-20b',
+  info: {
+    versions: ['openai/gpt-oss-safeguard-20b'],
+    label: 'Safety GPT OSS 20B',
+    supports: {
+      multiturn: true,
+      tools: true, // Could be true but not recommended
+      media: false,
+      systemRole: true,
+      output: ['text', 'json'],
+    },
+  },
+  configSchema: GroqConfigSchema,
+  version: 'openai/gpt-oss-safeguard-20b',
+});
+
+export const gptOssx120b = modelRef({
+  name: 'groq/openai/gpt-oss-120b',
+  info: {
+    versions: ['openai/gpt-oss-120b'],
+    label: 'GPT OSS 120B',
+    supports: {
+      multiturn: true,
+      tools: true, // Could be true but not recommended
+      media: false,
+      systemRole: true,
+      output: ['text', 'json'],
+    },
+  },
+  configSchema: GroqConfigSchema,
+  version: 'openai/gpt-oss-120b',
+});
+
+export const qwen36x27b = modelRef({
+  name: 'groq/qwen/qwen3.6-27b',
+  info: {
+    versions: ['qwen/qwen3.6-27b'],
+    label: 'Qwen 3.6 27B',
+    supports: {
+      multiturn: true,
+      tools: true, // Could be true but not recommended
+      media: false, // supports image input
+      systemRole: true,
+      output: ['text', 'json'],
+    },
+  },
+  configSchema: GroqConfigSchema,
+  version: 'qwen/qwen3.6-27b',
+});
+
+export const qwen3x32b = modelRef({
+  name: 'groq/qwen/qwen3-32b',
+  info: {
+    versions: ['qwen/qwen3-32b'],
+    label: 'Qwen 3 32B',
+    supports: {
+      multiturn: true,
+      tools: true, // Could be true but not recommended
+      media: false,
+      systemRole: true,
+      output: ['text', 'json'],
+    },
+  },
+  configSchema: GroqConfigSchema,
+  version: 'qwen/qwen3-32b',
+});
+
 export const SUPPORTED_GROQ_MODELS = {
   'llama-3-8b': llama3x8b,
   'llama-3-70b': llama3x70b,
@@ -278,6 +363,11 @@ export const SUPPORTED_GROQ_MODELS = {
   'qwen-qwq-32b': qwenqwqx32b,
   'deepseek-r1-distill-llama-70b': deepseekR1DistillLlamax70b,
   'allam-2-7b': allam2x7b,
+  'openai/gpt-oss-20b': gptOssx20b,
+  'openai/gpt-oss-safeguard-20b': gptOssSafeguardx20b,
+  'openai/gpt-oss-120b': gptOssx120b,
+  'qwen/qwen3.6-27b': qwen36x27b,
+  'qwen/qwen3-32b': qwen3x32b,
 };
 
 /**
