@@ -137,4 +137,4 @@ This plugin is proudly maintained by the team at [**Bloom Labs Inc**](https://gi
 
 ## License
 
-This project is licensed under the [Apache 2.0 License](https://github.com/BloomLabsInc/genkit-plugins/blob/main/LICENSE).
+This project is licensed under the [Apache 2.0 License](https://github.com/BloomLabsInc/genkit-plugins/blob/main/LICENSE). 
