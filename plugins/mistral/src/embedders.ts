@@ -15,8 +15,8 @@
  */
 
 import { Mistral } from '@mistralai/mistralai';
-import { Genkit } from 'genkit';
 import { embedderRef, z } from 'genkit';
+import { embedder } from 'genkit/plugin';
 
 export const TextEmbeddingConfigSchema = z.object({
   embeddingTypes: z.literal('float').optional(),
@@ -25,17 +25,19 @@ export const TextEmbeddingConfigSchema = z.object({
 
 export type TextEmbeddingConfig = z.infer<typeof TextEmbeddingConfigSchema>;
 
-export function mistralEmbedder(ai: Genkit, name: string, client: Mistral) {
-  const model = SUPPORTED_EMBEDDING_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+export function mistralEmbedder(name: string, client: Mistral) {
+  const modelRef = SUPPORTED_EMBEDDING_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  ai.defineEmbedder(
+  return embedder(
     {
-      info: model.info!,
+      info: modelRef.info!,
       configSchema: TextEmbeddingConfigSchema,
-      name: model.name,
+      name: modelRef.name,
     },
-    async (input, _) => {
+    async (request) => {
+      const { input } = request;
+
       const embeddings = await client.embeddings.create({
         model: name,
         inputs: input.map((d) => d.text),
@@ -53,7 +55,7 @@ export function mistralEmbedder(ai: Genkit, name: string, client: Mistral) {
 }
 
 export const mistralembed = embedderRef({
-  name: 'mistral/mistral-embed',
+  name: 'mistral-embed',
   configSchema: TextEmbeddingConfigSchema,
   info: {
     dimensions: 1024,

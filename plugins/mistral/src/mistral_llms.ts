@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { Message, Part, StreamingCallback } from 'genkit';
+import { Message, Part } from 'genkit';
 import {
   CandidateData,
   GenerateRequest,
-  GenerateResponseChunkData,
   MessageData,
   ModelAction,
   Role,
@@ -35,16 +34,16 @@ import {
   ChatCompletionResponse,
   ContentChunk,
 } from '@mistralai/mistralai/models/components/index.js';
-import { Genkit } from 'genkit';
 import { z } from 'genkit';
 import { Mistral } from '@mistralai/mistralai';
+import { model } from 'genkit/plugin';
 
 export const MistralConfigSchema = GenerationCommonConfigSchema.extend({
   visualDetailLevel: z.enum(['auto', 'low', 'high']).optional(),
 });
 
 export const openMistral7B = modelRef({
-  name: 'mistral/open-mistral-7b',
+  name: 'open-mistral-7b',
   info: {
     versions: ['mistral-tiny-2312'],
     label: 'Mistral - Mistral 7B',
@@ -60,7 +59,7 @@ export const openMistral7B = modelRef({
 });
 
 export const openMinistral3B = modelRef({
-  name: 'mistral/ministral-3b',
+  name: 'ministral-3b',
   info: {
     versions: ['ministral-3b-latest', 'ministral-3b-2410'],
     label: 'Mistral - Ministral 3B',
@@ -76,7 +75,7 @@ export const openMinistral3B = modelRef({
 });
 
 export const openMinistral8B = modelRef({
-  name: 'mistral/ministral-8b',
+  name: 'ministral-8b',
   info: {
     versions: ['ministral-8b-latest', 'ministral-8b-2410'],
     label: 'Mistral - Ministral 8B',
@@ -92,7 +91,7 @@ export const openMinistral8B = modelRef({
 });
 
 export const openMistralNemo = modelRef({
-  name: 'mistral/open-mistral-nemo',
+  name: 'open-mistral-nemo',
   info: {
     versions: ['open-mistral-nemo', 'pen-mistral-nemo-2407'],
     label: 'Mistral - Nemo Model',
@@ -108,7 +107,7 @@ export const openMistralNemo = modelRef({
 });
 
 export const openMistralSaba = modelRef({
-  name: 'mistral/mistral-saba',
+  name: 'mistral-saba',
   info: {
     versions: ['mistral-saba-latest', 'mistral-saba-2502'],
     label: 'Mistral - Saba Model',
@@ -124,7 +123,7 @@ export const openMistralSaba = modelRef({
 });
 
 export const openCodestralMambda = modelRef({
-  name: 'mistral/open-codestral-mamba',
+  name: 'open-codestral-mamba',
   info: {
     versions: ['open-codestral-mamba'],
     label: 'Mistral - Codestral Mamba',
@@ -140,7 +139,7 @@ export const openCodestralMambda = modelRef({
 });
 
 export const openCodestral = modelRef({
-  name: 'mistral/codestral',
+  name: 'codestral',
   info: {
     versions: ['codestral-latest', 'codestral-2501'],
     label: 'Mistral - Codestral',
@@ -156,7 +155,7 @@ export const openCodestral = modelRef({
 });
 
 export const openMistral8x7B = modelRef({
-  name: 'mistral/open-mixtral-8x7b',
+  name: 'open-mixtral-8x7b',
   info: {
     versions: ['open-mixtral-8x7b'],
     label: 'Mistral - Mistral 8x7B',
@@ -172,7 +171,7 @@ export const openMistral8x7B = modelRef({
 });
 
 export const openMixtral8x22B = modelRef({
-  name: 'mistral/open-mixtral-8x22b',
+  name: 'open-mixtral-8x22b',
   info: {
     versions: ['open-mixtral-8x22b'],
     label: 'Mistral - Mistral 8x22B',
@@ -188,7 +187,7 @@ export const openMixtral8x22B = modelRef({
 });
 
 export const openMistralSmall = modelRef({
-  name: 'mistral/mistral-small',
+  name: 'mistral-small',
   info: {
     versions: [
       'mistral-small-latest',
@@ -208,7 +207,7 @@ export const openMistralSmall = modelRef({
 });
 
 export const openMistralMedium = modelRef({
-  name: 'mistral/mistral-medium',
+  name: 'mistral-medium',
   info: {
     versions: ['mistral-medium-2312'],
     label: 'Mistral - Mistral Medium',
@@ -224,7 +223,7 @@ export const openMistralMedium = modelRef({
 });
 
 export const openMistralLarge = modelRef({
-  name: 'mistral/mistral-large',
+  name: 'mistral-large',
   info: {
     versions: [
       'mistral-large-latest',
@@ -244,7 +243,7 @@ export const openMistralLarge = modelRef({
 });
 
 export const openPixtralLarge = modelRef({
-  name: 'mistral/pixtral-large',
+  name: 'pixtral-large',
   info: {
     versions: ['pixtral-large-latest', 'pixtral-large-2411'],
     label: 'Mistral - Pixtral Large',
@@ -260,7 +259,7 @@ export const openPixtralLarge = modelRef({
 });
 
 export const openPixtral = modelRef({
-  name: 'mistral/pixtral',
+  name: 'pixtral',
   info: {
     versions: ['pixtral-12b-2409'],
     label: 'Mistral - Pixtral',
@@ -485,33 +484,31 @@ export function toMistralRequestBody(
 }
 
 export function mistralModel(
-  ai: Genkit,
   name: string,
   client: Mistral
 ): ModelAction<typeof GenerationCommonConfigSchema> {
   //Ugly any type, should be MistralClient but cannot import it here
-  const modelId = `mistral/${name}`;
-  const model = SUPPORTED_MISTRAL_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_MISTRAL_MODELS[name];
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  return ai.defineModel(
+  return model(
     {
-      name: modelId,
-      ...model.info,
+      name,
+      ...modelRef.info,
       configSchema: SUPPORTED_MISTRAL_MODELS[name].configSchema,
     },
     async (
+      options,
       request,
-      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
     ) => {
       let response: ChatCompletionResponse | CompletionChunk;
-      const body = toMistralRequestBody(name, request);
-      if (streamingCallback) {
+      const body = toMistralRequestBody(name, options);
+      if (request.sendChunk) {
         const stream = await client.chat.stream(body);
         for await (const chunk of stream) {
           chunk.data.choices?.forEach((choice) => {
             const c = fromMistralChunkChoice(choice);
-            streamingCallback({
+            request.sendChunk({
               index: c.index,
               content: c.message.content,
             });
