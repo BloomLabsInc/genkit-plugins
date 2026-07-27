@@ -23,7 +23,7 @@
     "cohere-ai": "^7.17.1"
   },
   "peerDependencies": {
-    "genkit": "^0.9.0 || ^1.0.0"
+    "genkit": "^1.19.3"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-import type { Genkit } from 'genkit';
-import { genkitPlugin } from 'genkit/plugin';
+import { genkitPluginV2, ResolvableAction } from 'genkit/plugin';
 import { CohereClient } from 'cohere-ai';
 
 import {
   cohereEmbedder,
   SUPPORTED_EMBEDDING_MODELS,
-  embedMultilingual4,
 } from './embedder';
 import { commandModel, SUPPORTED_COMMAND_MODELS } from './command';
 
@@ -44,21 +42,27 @@ export interface PluginOptions {
 }
 
 export const cohere = (options?: PluginOptions) =>
-  genkitPlugin('cohere', async (ai: Genkit) => {
-    let apiKey = options?.apiKey || process.env.COHERE_API_KEY;
-    if (!apiKey)
-      throw new Error(
-        'Please pass in the API key or set the COHERE_API_KEY environment variable'
-      );
-    const client = new CohereClient({ token: apiKey });
+  genkitPluginV2({
+    name: 'cohere',
+    init: async () => {
+      let apiKey = options?.apiKey || process.env.COHERE_API_KEY;
+      if (!apiKey)
+        throw new Error(
+          'Please pass in the API key or set the COHERE_API_KEY environment variable'
+        );
+      const client = new CohereClient({ token: apiKey });
+      const actions: ResolvableAction[] = [];
 
-    for (const name of Object.keys(SUPPORTED_COMMAND_MODELS)) {
-      commandModel(ai, name, client);
-    }
+      for (const name of Object.keys(SUPPORTED_COMMAND_MODELS)) {
+        actions.push(commandModel(name, client));
+      }
 
-    for (const name of Object.keys(SUPPORTED_EMBEDDING_MODELS)) {
-      cohereEmbedder(ai, name, options);
-    }
+      for (const name of Object.keys(SUPPORTED_EMBEDDING_MODELS)) {
+        actions.push(cohereEmbedder(name, options));
+      }
+
+      return actions;
+    },
   });
 
 export default cohere;

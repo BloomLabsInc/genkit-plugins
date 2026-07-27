@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-import type { Genkit } from 'genkit';
 import { Message, GenerationCommonConfigSchema, z } from 'genkit';
 import type {
   GenerateRequest,
   MessageData,
   Role,
-  StreamingCallback,
   ToolRequestPart,
 } from 'genkit';
 import type {
   ModelAction,
   ToolDefinition,
   CandidateData,
-  GenerateResponseChunkData,
 } from 'genkit/model';
 import { modelRef } from 'genkit/model';
 import type { CohereClient } from 'cohere-ai';
 import { Cohere } from 'cohere-ai';
 import type { ChatStreamEndEventFinishReason } from 'cohere-ai/api';
+import { model } from 'genkit/plugin';
 
 export const CohereConfigSchema = GenerationCommonConfigSchema.extend({
   frequencyPenalty: z.number().min(-2).max(2).optional(),
@@ -64,7 +62,8 @@ export const CohereConfigSchema = GenerationCommonConfigSchema.extend({
 });
 
 export const commandRPlus = modelRef({
-  name: 'cohere/command-r-plus',
+  name: 'command-r-plus',
+  namespace: 'cohere',
   info: {
     versions: ['command-r-plus', 'command-r-plus-04-2024'],
     label: 'Cohere - Command R Plus',
@@ -80,7 +79,8 @@ export const commandRPlus = modelRef({
 });
 
 export const commandR = modelRef({
-  name: 'cohere/command-r',
+  name: 'command-r',
+  namespace: 'cohere',
   info: {
     versions: [
       'command-r',
@@ -101,7 +101,8 @@ export const commandR = modelRef({
 });
 
 export const commandA = modelRef({
-  name: 'cohere/command-a',
+  name: 'command-a',
+  namespace: 'cohere',
   info: {
     versions: ['command-a-03-2025'],
     label: 'Cohere - Command A',
@@ -117,7 +118,8 @@ export const commandA = modelRef({
 });
 
 export const command = modelRef({
-  name: 'cohere/command',
+  name: 'command',
+  namespace: 'cohere',
   info: {
     versions: ['command', 'command-nightly'],
     label: 'Cohere - Command',
@@ -133,7 +135,8 @@ export const command = modelRef({
 });
 
 export const commandLight = modelRef({
-  name: 'cohere/command-light',
+  name: 'command-light',
+  namespace: 'cohere',
   info: {
     versions: ['command-light', 'command-light-nightly'],
     label: 'Cohere - Command Light',
@@ -456,23 +459,22 @@ export function toCohereRequestBody(
  *
  */
 export function commandModel(
-  ai: Genkit,
   name: string,
   client: CohereClient
 ): ModelAction<typeof CohereConfigSchema> {
-  const modelId = `cohere/${name}`;
-  const model = SUPPORTED_COMMAND_MODELS[name];
-  if (!model) throw new Error(`Unsupported model: ${name}`);
+  const modelRef = SUPPORTED_COMMAND_MODELS[name];
+  const modelId = modelRef.namespace + '/' + `${name}`;
+  if (!modelRef) throw new Error(`Unsupported model: ${name}`);
 
-  return ai.defineModel(
+  return model(
     {
       name: modelId,
-      ...model.info,
+      ...modelRef.info,
       configSchema: SUPPORTED_COMMAND_MODELS[name].configSchema,
     },
     async (
       request,
-      streamingCallback?: StreamingCallback<GenerateResponseChunkData>
+      options
     ): Promise<{
       candidates: CandidateData[];
       usage: {
@@ -484,13 +486,13 @@ export function commandModel(
     }> => {
       let response: Cohere.NonStreamedChatResponse | undefined;
       const body = toCohereRequestBody(name, request);
-      if (streamingCallback) {
+      if (options.sendChunk) {
         // Based on these docs: https://docs.cohere.com/docs/streaming
         const stream = await client.chatStream(body);
         let eventIndex = 0;
         for await (const event of stream) {
           const c = fromCohereStreamEvent(event, eventIndex);
-          streamingCallback({
+          options.sendChunk({
             index: c.index,
             content: c.message.content,
             custom: c.custom,
